@@ -147,4 +147,33 @@ public static class Database
         command.ExecuteNonQuery();
         _sqliteConnection.Close(); 
     }
+
+    public static List<Data> GetAll(Data blueprint, string name)
+    {
+        if(!CheckForDatabaseConnected()) throw new DatabaseConnectedException();
+        _sqliteConnection.Open();
+        using var command = _sqliteConnection.CreateCommand();
+        command.CommandText = $"SELECT * FROM {name}";
+        using var reader = command.ExecuteReader();
+        int index = 0;
+        List<Data> list = new List<Data>();
+        Data current = blueprint.CopyFormat();
+        if (reader.Read())
+        {
+            if (current.Next() == null)
+            {
+                current.ResetIndex();
+                list.Add(current);
+                current = blueprint.CopyFormat();
+            }
+            current.Add(reader.GetString(index + 1));
+            index++;
+        }
+        list.Add(current);
+
+        blueprint.ResetIndex();
+        
+        _sqliteConnection.Close();
+        return list;
+    }
 }

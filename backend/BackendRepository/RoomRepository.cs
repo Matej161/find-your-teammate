@@ -9,7 +9,7 @@ public class RoomRepository : IRepository<ChatRoom>
 
     public ChatRoom[] GetAll()
     {
-        throw new NotImplementedException();
+        return ChatRoom.GetAll();
     }
 
     public ChatRoom Add(ChatRoom entity)
@@ -24,6 +24,8 @@ public class RoomRepository : IRepository<ChatRoom>
 
     public ChatRoom Remove(Guid id)
     {
-        throw new NotImplementedException();
+        ChatRoom chatRoom = GetById(id);
+        
+        return chatRoom;
     }
 }
