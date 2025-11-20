@@ -5,25 +5,30 @@ namespace Backend;
 public class ChatRoom
 {
     public static string Name = "ChatRoom";
-    public static List<string> Blueprint = ["Name", "Users", "Messages"];
+    public static List<string> Blueprint = ["Name", "Users", "Messages", "Active"];
     
-    public ChatRoom(Guid id, bool existsInDatabase)
+    public ChatRoom(Guid id)
     {
         Data data = new Data(Blueprint);
         data.Add("Random nazev");
         data.Add("[]");
         data.Add("[]");
+        data.Add("true");
         Database.Database.UpdateOrCreateData(data, Name, id);
         Status.PrintSuccess($"Created a chatroom with id {id}");
+    }
+
+    public ChatRoom(Guid id, string name, string users, string messages, string active)
+    {
+        
     }
 
     public static void Deactivate(Guid id)
     {
         Status.PrintSuccess($"Deleted a chatroom with id {id}");
-        ChatRoomManager.DeactivateRoom(id);
     }
 
-    public static void SendMessage(string message, long id)
+    public static void SendMessage(string message, Guid id)
     {
         List<String> messages = GetMessages(id);
         messages.Add(message);
@@ -48,7 +53,7 @@ public class ChatRoom
         return formated;
     }
 
-    public static List<string> GetMessages(long id)
+    public static List<string> GetMessages(Guid id)
     {
         Data dataInDatabase = Database.Database.ReadData(new Data(Blueprint), Name, id);
         string data = dataInDatabase.GetDataByString("Messages");
@@ -63,8 +68,18 @@ public class ChatRoom
     
     public static ChatRoom CreateChatRoom()
     {
-        long id = ChatRoomManager.GetUnusedRoom();
-        if (id == -1) return new ChatRoom(ChatRoomManager.GetNewRoom(), false);
-        return new ChatRoom(id, true);
+        return new ChatRoom(Guid.NewGuid());
+    }
+
+
+    public static ChatRoom[] GetAll()
+    {
+        List<Data> all = Database.Database.GetAll(new Data(Blueprint), Name);
+        ChatRoom[] chatRooms = new ChatRoom[all.Count];
+        for (int i = 0; i < all.Count; i++)
+        {
+            chatRooms[i] = new ChatRoom(Guid.NewGuid(), all[i].Next(), all[i].Next(), all[i].Next(), all[i].Next());
+        }
+        return chatRooms;
     }
 }

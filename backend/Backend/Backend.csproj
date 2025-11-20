@@ -15,8 +15,4 @@
       <Content Include="bin\Debug\net9.0\database.db" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Compile Include="bin\ChatRoomCreator.cs" />
-    </ItemGroup>
-
 </Project>
