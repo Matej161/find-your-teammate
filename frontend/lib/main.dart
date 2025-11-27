@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/forgotpassword_screen.dart';
 import 'package:frontend/screens/home_screen.dart';
 // Required for clean URL paths (removes the '#' from web URLs)
 import 'screens/login_screen.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Auth Demo',
+      title: 'Find your teammate',
       // Define a simple theme
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
+        '/forgotpassword': (context) => const ForgotPasswordScreen(),
       },
     );
   }

@@ -7,6 +7,7 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      backgroundColor: Color(0xFF36413E), 
       body: Center(
         // Use the same light background color for consistency
         child: RegisterWidget(), 

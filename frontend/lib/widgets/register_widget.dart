@@ -69,7 +69,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: _isHoveringLogin ? Colors.blue : Colors.black,
+                        color: _isHoveringLogin ? Colors.teal : Colors.black,
                         decoration: _isHoveringLogin
                             ? TextDecoration.underline
                             : TextDecoration.none,

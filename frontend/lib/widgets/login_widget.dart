@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
 
@@ -10,7 +8,17 @@ class LoginWidget extends StatefulWidget {
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
-  bool _isHovering = false;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isHoveringRegister = false;
+  bool _isHoveringForgot = false; // State for the new Forgot Password link
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +47,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Login / Register Row
+            // Login / Register Row (Navigation Header)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -56,10 +64,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
                   onEnter: (_) => setState(
-                    () => _isHovering = true,
+                    () => _isHoveringRegister = true,
                   ),
                   onExit: (_) => setState(
-                    () => _isHovering = false,
+                    () => _isHoveringRegister = false,
                   ),
                   child: GestureDetector(
                     onTap: () {
@@ -74,8 +82,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: _isHovering ? Colors.blue : Colors.black,
-                        decoration: _isHovering
+                        color: _isHoveringRegister ? Colors.teal : Colors.black,
+                        decoration: _isHoveringRegister
                             ? TextDecoration.underline
                             : TextDecoration.none,
                       ),
@@ -86,8 +94,9 @@ class _LoginWidgetState extends State<LoginWidget> {
             ),
             const SizedBox(height: 20),
 
-            // Email
+            // Email Field
             TextField(
+              controller: _emailController,
               decoration: InputDecoration(
                 labelText: "Email",
                 border: OutlineInputBorder(
@@ -99,8 +108,9 @@ class _LoginWidgetState extends State<LoginWidget> {
             ),
             const SizedBox(height: 16),
 
-            // Password
+            // Password Field
             TextField(
+              controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: "Password",
@@ -111,12 +121,41 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 8),
+            
+            // NEW: Forgot Password Link/Button
+            Align(
+              alignment: Alignment.center,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                onEnter: (_) => setState(() => _isHoveringForgot = true),
+                onExit: (_) => setState(() => _isHoveringForgot = false),
+                child: GestureDetector(
+                  onTap: () {
+                    // Navigate to the new forgot password screen
+                    Navigator.of(context).pushReplacementNamed('/forgotpassword');
+                  },
+                  child: Text(
+                    "Forgot Password?",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: _isHoveringForgot ? Colors.red[700] : Colors.red,
+                      decoration: _isHoveringForgot
+                          ? TextDecoration.underline
+                          : TextDecoration.none,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20), // Space before the Login button
 
             // Login button
             ElevatedButton(
               onPressed: () {
-                // TODO: Add login logic here
+                final email = _emailController.text;
+                final password = _passwordController.text;
+                print('Attempting login for: $email');
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
