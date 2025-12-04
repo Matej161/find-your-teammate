@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-// The unnecessary main() function and register_widget MaterialApp have been removed.
-
 class RegisterWidget extends StatefulWidget {
   const RegisterWidget({super.key});
 
@@ -10,17 +8,17 @@ class RegisterWidget extends StatefulWidget {
 }
 
 class _RegisterWidgetState extends State<RegisterWidget> {
-  // 1. Controllers to capture input
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  bool _isHoveringLogin = false;
+  // Custom colors matching the Login theme
+  final Color primaryColor = const Color(0xFF4895ef); // Blue
+  final Color secondaryColor = const Color(0xFF4cc9f0); // Light Blue/Teal
 
   @override
   void dispose() {
-    // Clean up controllers when the widget is removed
     _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
@@ -30,19 +28,32 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    // 1. Get screen dimensions for responsive scaling
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // 2. Define responsive measurements
+    final responsiveWidth = screenWidth * 0.9 > 380 ? 380.0 : screenWidth * 0.9;
+    final horizontalMargin = screenWidth * 0.05; 
+    final innerPadding = screenWidth * 0.06;
+    final titleFontSize = screenWidth * 0.07; // Responsive title size
+    final inputFontSize = screenWidth * 0.04; 
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: responsiveWidth,
+      ),
       child: Container(
-        padding: const EdgeInsets.all(24),
-        width: 350,
+        margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
+        padding: EdgeInsets.all(innerPadding),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              spreadRadius: 2,
-              offset: const Offset(0, 5),
+              color: Colors.black.withOpacity(0.15),
+              blurRadius: 20,
+              spreadRadius: 3,
             ),
           ],
         ),
@@ -50,121 +61,146 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Login / Register Row
+            Text(
+              "Create Account",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: titleFontSize,
+                fontWeight: FontWeight.w900,
+                color: const Color(0xFF3B5998),
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.03), 
+
+            // Username Field
+            TextField(
+              controller: _usernameController,
+              style: TextStyle(fontSize: inputFontSize),
+              decoration: InputDecoration(
+                labelText: "Username",
+                prefixIcon: Icon(Icons.person, color: primaryColor),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Email Field
+            TextField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              style: TextStyle(fontSize: inputFontSize),
+              decoration: InputDecoration(
+                labelText: "Email Address",
+                prefixIcon: Icon(Icons.email, color: primaryColor),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Password Field
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              style: TextStyle(fontSize: inputFontSize),
+              decoration: InputDecoration(
+                labelText: "Password",
+                prefixIcon: Icon(Icons.lock, color: primaryColor),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Confirm Password Field
+            TextField(
+              controller: _confirmPasswordController,
+              obscureText: true,
+              style: TextStyle(fontSize: inputFontSize),
+              decoration: InputDecoration(
+                labelText: "Confirm Password",
+                prefixIcon: Icon(Icons.lock_reset, color: primaryColor),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.04),
+
+            // Register Button with Gradient
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                gradient: LinearGradient(
+                  colors: [primaryColor, secondaryColor],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: primaryColor.withOpacity(0.4),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  final username = _usernameController.text;
+                  final email = _emailController.text;
+                  print('Register attempt for: $username ($email)');
+                  // TODO: Add registration logic
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  // Larger vertical padding for easier touching on mobile
+                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.025),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+                child: Text(
+                  "R E G I S T E R",
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.045, // Big, readable text
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.04),
+
+            // Login Navigation Link
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                MouseRegion(
-                  // Navigation to Login
-                  cursor: SystemMouseCursors.click,
-                  onEnter: (_) => setState(() => _isHoveringLogin = true),
-                  onExit: (_) => setState(() => _isHoveringLogin = false),
+                Text(
+                  "Already have an account? ",
+                  style: TextStyle(fontSize: screenWidth * 0.035, color: Colors.black54),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
                   child: GestureDetector(
                     onTap: () {
-                      // Navigate back to the login page
                       Navigator.of(context).pushReplacementNamed('/login');
                     },
                     child: Text(
-                      "Login",
+                      "LOG IN",
                       style: TextStyle(
-                        fontSize: 28,
+                        fontSize: screenWidth * 0.04,
                         fontWeight: FontWeight.bold,
-                        color: _isHoveringLogin ? Colors.teal : Colors.black,
-                        decoration: _isHoveringLogin
-                            ? TextDecoration.underline
-                            : TextDecoration.none,
+                        color: primaryColor,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
-                const Text(
-                  // Currently on Register page
-                  "/ Register",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(width: 8),
               ],
-            ),
-            const SizedBox(height: 20),
-
-            // Username
-            TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(
-                labelText: "Username",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Email
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: "Email",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Password
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: "Password",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            
-            // Confirm Password (New Field)
-            TextField(
-              controller: _confirmPasswordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: "Confirm Password",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Register button
-            ElevatedButton(
-              onPressed: () {
-                // Get the input values when the button is pressed
-                final username = _usernameController.text;
-                final email = _emailController.text;
-                final password = _passwordController.text;
-                final confirmPassword = _confirmPasswordController.text;
-
-                print('Register attempt for: $username ($email)');
-                // TODO: Add registration and validation logic here
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text(
-                "Register", // Changed to Register
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
             ),
           ],
         ),
