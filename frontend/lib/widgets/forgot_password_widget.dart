@@ -9,7 +9,11 @@ class ForgotPasswordWidget extends StatefulWidget {
 
 class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
   final _emailController = TextEditingController();
-  bool _isHoveringLogin = false;
+  
+  // Custom colors matching the application theme
+  final Color primaryColor = const Color(0xFF4895ef); // Blue
+  final Color secondaryColor = const Color(0xFF4cc9f0); // Light Blue/Teal
+  final Color accentColor = const Color(0xFFF77F00); // Orange (for highlights/links)
 
   @override
   void dispose() {
@@ -20,38 +24,61 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
   // Function to simulate sending the reset email
   void _handleResetPassword() {
     final email = _emailController.text;
-    if (email.isNotEmpty) {
-      print('Sending password reset link to: $email');
-      // In a real app, you would call an API service here.
-      // For now, we'll just navigate back to the login screen after a small delay.
+    if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Password reset link sent to $email (simulated).'),
-          duration: const Duration(seconds: 3),
+        const SnackBar(
+          content: Text('Please enter your email address.'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
         ),
       );
-      // Navigate back to login
-      Future.delayed(const Duration(seconds: 2), () {
-        Navigator.of(context).pushReplacementNamed('/login');
-      });
+      return;
     }
+    
+    // Show success message and simulate API call
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Password reset link sent to $email (simulated).'),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+    
+    // Navigate back to login after showing success
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.of(context).pushReplacementNamed('/login');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    // 1. Get screen dimensions for responsive scaling
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // 2. Define responsive measurements
+    final responsiveWidth = screenWidth * 0.9 > 380 ? 380.0 : screenWidth * 0.9;
+    final horizontalMargin = screenWidth * 0.05; 
+    final innerPadding = screenWidth * 0.06;
+    final titleFontSize = screenWidth * 0.07; // Responsive title size
+    final inputFontSize = screenWidth * 0.04; 
+    final buttonFontSize = screenWidth * 0.045; 
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: responsiveWidth,
+      ),
       child: Container(
-        padding: const EdgeInsets.all(24),
-        width: 350,
+        margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
+        padding: EdgeInsets.all(innerPadding),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              spreadRadius: 2,
-              offset: const Offset(0, 5),
+              color: Colors.black.withOpacity(0.15),
+              blurRadius: 20,
+              spreadRadius: 3,
             ),
           ],
         ),
@@ -59,71 +86,98 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
+            Text(
               "Reset Password",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
+                fontSize: titleFontSize,
+                fontWeight: FontWeight.w900,
+                color: const Color(0xFF3B5998),
               ),
             ),
-            const SizedBox(height: 10),
-            const Text(
-              "Enter your email address to receive a password reset link.",
+            SizedBox(height: screenHeight * 0.02),
+
+            // Instructional Text (Responsive)
+            Text(
+              "Enter your email address below and we'll send you a link to reset your password.",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: TextStyle(
+                fontSize: screenWidth * 0.035, 
+                color: Colors.black54,
+              ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: screenHeight * 0.03),
 
             // Email Field
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
+              style: TextStyle(fontSize: inputFontSize),
               decoration: InputDecoration(
                 labelText: "Email Address",
+                prefixIcon: Icon(Icons.email, color: primaryColor),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(15),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: screenHeight * 0.04),
 
-            // Send Reset Link Button
-            ElevatedButton(
-              onPressed: _handleResetPassword,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            // Send Reset Link Button with Gradient
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                gradient: LinearGradient(
+                  colors: [primaryColor, secondaryColor],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: primaryColor.withOpacity(0.4),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: ElevatedButton(
+                onPressed: _handleResetPassword,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  // Larger vertical padding for easier touching on mobile
+                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.025),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+                child: Text(
+                  "S E N D   L I N K",
+                  style: TextStyle(
+                    fontSize: buttonFontSize, // Responsive font size
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-              child: const Text(
-                "Send Reset Link",
-                style: TextStyle(fontSize: 18),
-              ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: screenHeight * 0.04),
 
             // Back to Login Link
-            MouseRegion(
-              cursor: SystemMouseCursors.click,
-              onEnter: (_) => setState(() => _isHoveringLogin = true),
-              onExit: (_) => setState(() => _isHoveringLogin = false),
-              child: GestureDetector(
-                onTap: () {
-                  // Navigate back to the login page
-                  Navigator.of(context).pushReplacementNamed('/login');
-                },
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed('/login');
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Center(
                   child: Text(
                     "Back to Login",
                     style: TextStyle(
-                      fontSize: 16,
-                      color: _isHoveringLogin ? Colors.blue[800] : Colors.blue,
-                      decoration: _isHoveringLogin
-                          ? TextDecoration.underline
-                          : TextDecoration.none,
+                      fontSize: screenWidth * 0.04, // Mobile-friendly size
+                      fontWeight: FontWeight.bold,
+                      color: accentColor,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
