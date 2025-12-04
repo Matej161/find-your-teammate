@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/forgotpassword_widget.dart'; // Import the new widget
+import '../widgets/forgot_password_widget.dart'; // Import the new widget
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});

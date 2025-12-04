@@ -5,27 +5,43 @@ class HomeNavButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // We wrap the button in Padding to ensure it's not flush against the screen edges.
+    // Use MediaQuery to get the screen height and width
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Define responsive padding and font size based on screen dimensions.
+    // We use a small fraction of the screen width/height for relative sizing.
+    // These ratios ensure the button looks good on various devices.
+    final horizontalPadding = screenWidth * 0.05; // 5% of screen width
+    final verticalPadding = screenHeight * 0.02;  // 2% of screen height
+    final buttonPadding = EdgeInsets.symmetric(
+      horizontal: horizontalPadding, 
+      vertical: verticalPadding * 0.75, // Make button vertical padding slightly smaller
+    );
+    final topOffset = screenHeight * 0.05; // 5% from the top
+    final rightOffset = screenWidth * 0.04; // 4% from the right
+
     return Padding(
-      padding: const EdgeInsets.only(top: 20.0, right: 16.0), // Added more top padding for safety/status bar area
+      // Use responsive padding for precise positioning
+      padding: EdgeInsets.only(top: topOffset, right: rightOffset),
       child: TextButton(
         onPressed: () {
           // Navigate to the login page when the button is pressed
-          // Using pushReplacementNamed for clean navigation history
           Navigator.of(context).pushReplacementNamed('/login');
         },
         style: TextButton.styleFrom(
-          backgroundColor: Colors.teal.withOpacity(0.9), // Slightly opaque background for a modern look
+          backgroundColor: Colors.teal.withOpacity(0.9),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
+            borderRadius: BorderRadius.circular(30), // Slightly reduced corner radius
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+          padding: buttonPadding,
         ),
-        child: const Text(
+        child: Text(
           "Login / Register",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 16,
+            // Use responsive font size
+            fontSize: screenWidth * 0.04, // 4% of screen width for the font size
             fontWeight: FontWeight.bold,
           ),
         ),
