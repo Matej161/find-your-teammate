@@ -11,3 +11,55 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+#-----------Backend gitignore----------
+
+Build outputs
+bin/
+obj/
+out/
+
+Visual Studio files
+.vs/
+*.user
+*.suo
+
+Rider / JetBrains
+.idea/
+*.sln.iml
+
+NuGet
+*.nupkg
+packages/
+project.lock.json
+project.assets.json
+
+Logs
+*.log
+
+Temporary files
+*.tmp
+*.temp
+
+Published output
+publish/
+.publishsettings
+
+Configuration secrets
+appsettings.Development.json
+appsettings.Local.json
+
+Resharper
+_ReSharper/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+Cache
+*.cache
+*.db
+*.db-shm
+*.db-wal
+
+OS files
+.DS_Store
+Thumbs.db
