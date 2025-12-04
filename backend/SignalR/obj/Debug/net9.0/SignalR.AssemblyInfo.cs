@@ -10,12 +10,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("Backend")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("SignalR")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4c58af7ff0e226fd79a85821b533b673b792dfb4")]
-[assembly: System.Reflection.AssemblyProductAttribute("Backend")]
-[assembly: System.Reflection.AssemblyTitleAttribute("Backend")]
+[assembly: System.Reflection.AssemblyProductAttribute("SignalR")]
+[assembly: System.Reflection.AssemblyTitleAttribute("SignalR")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Vygenerované třídou WriteCodeFragment nástroje MSBuild
