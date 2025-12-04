@@ -117,3 +117,56 @@ app.*.symbols
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
+
+
+#-----------Backend gitignore----------
+
+Build outputs
+bin/
+obj/
+out/
+
+Visual Studio files
+.vs/
+*.user
+*.suo
+
+Rider / JetBrains
+.idea/
+*.sln.iml
+
+NuGet
+*.nupkg
+packages/
+project.lock.json
+project.assets.json
+
+Logs
+*.log
+
+Temporary files
+*.tmp
+*.temp
+
+Published output
+publish/
+.publishsettings
+
+Configuration secrets
+appsettings.Development.json
+appsettings.Local.json
+
+Resharper
+_ReSharper/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+Cache
+*.cache
+*.db
+*.db-shm
+*.db-wal
+
+OS files
+.DS_Store
+Thumbs.db
