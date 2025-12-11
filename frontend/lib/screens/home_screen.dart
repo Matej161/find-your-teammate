@@ -1,35 +1,207 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/home_nav_button_widget.dart';
-// Import the specific widget you want to place in the top right
- 
+import 'package:frontend/widgets/login_button_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // The Scaffold provides the basic structure (like the background).
-    // The body uses a Stack to layer multiple widgets on top of each other.
-    return const Scaffold( 
-      backgroundColor: Color(0xFFFFEEDD),
-      body: Stack(
-        children: [
-          // 1. Main Content: This widget is centered and serves as the main screen body.
-          Center(
-            child: Text(
-              'Hello, welcome to our app!',
-              style: TextStyle(fontSize: 24, color: Colors.indigo),
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        // Blue Gradient Background (Matches your reference)
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFE3F2FD), // Light Blue
+              Color(0xFF90CAF9), // Medium Blue
+            ],
+          ),
+        ),
+        child: Stack(
+          children: [
+            // --- CENTERED CARD ---
+            Center(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.07),
+                  child: Card(
+                    elevation: 10,
+                    shadowColor: Colors.black26,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    color: Colors.white,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24, 
+                        vertical: screenHeight * 0.04
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // 1. HEADING
+                          const Text(
+                            'Find Your Squad',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w800,
+                              color: Color(0xFF1565C0), // Dark Blue
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                          
+                          const SizedBox(height: 10),
+                          
+                          const Text(
+                            'The ultimate platform for gamers.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF546E7A),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+
+                          const SizedBox(height: 30),
+
+                          // 2. FEATURE LIST (Fills the empty space)
+                          // I created a helper method below to keep this clean
+                          _buildFeatureItem(
+                            icon: Icons.groups_rounded, 
+                            title: "Find Teammates",
+                            subtitle: "Connect with players instantly.",
+                            color: Colors.orange,
+                          ),
+                          const SizedBox(height: 20),
+                          _buildFeatureItem(
+                            icon: Icons.gamepad_rounded, 
+                            title: "Explore Games",
+                            subtitle: "Discover new lobbies to join.",
+                            color: Colors.purple,
+                          ),
+                          const SizedBox(height: 20),
+                          _buildFeatureItem(
+                            icon: Icons.chat_bubble_rounded, 
+                            title: "Real-time Chat",
+                            subtitle: "Strategize before you play.",
+                            color: Colors.teal,
+                          ),
+
+                          const SizedBox(height: 40),
+
+                          // 3. GRADIENT BUTTON
+                          Container(
+                            width: double.infinity,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF42A5F5), Color(0xFF1976D2)],
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.blue.withOpacity(0.3),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 6),
+                                ),
+                              ],
+                            ),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('/register');
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                              ),
+                              child: const Text(
+                                'GET STARTED',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  letterSpacing: 1.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ),
-          
-          // 2. Positioned Button: The Align widget places its child 
-          // (your button) relative to the Stack.
-          Align(
-            alignment: Alignment.topRight,
-            child: HomeNavButtonWidget(),
-          ),
-        ],
+
+            // --- TOP RIGHT LOGIN TEXT ---
+            const SafeArea(
+              child: Align(
+                alignment: Alignment.topRight,
+                child: HomeNavButtonWidget(),
+              ),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+
+  // --- HELPER WIDGET FOR THE FEATURE LIST ---
+  // This creates the Icon + Text rows
+  Widget _buildFeatureItem({
+    required IconData icon, 
+    required String title, 
+    required String subtitle,
+    required Color color,
+  }) {
+    return Row(
+      children: [
+        // Circular Icon Background
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1), // Light pastel background
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: color, size: 28),
+        ),
+        const SizedBox(width: 16),
+        // Text Info
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF37474F),
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
