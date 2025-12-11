@@ -13,13 +13,13 @@ public abstract class SignalRContracts : Hub,ISignalRContracts
     public async Task SendChatMessage(Message message)
     {
         await Clients.Group(ChatRoom.Name).SendAsync("ReceiveChatMessage", message);
-        
+        ChatRoom.SendMessage(message.Content, message.Id);
     }
 
     public async Task SendEditMessage(Guid messageid, Message message)
     {
-        await Clients.Group(ChatRoom.Name).SendAsync("ReceiveEditMessage", message);
-        ChatRoom.SendMessage(message.Content, message.Id);
+       
+       
     }
 
     public void SendDeleteMessage(Guid message)
