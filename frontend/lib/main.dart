@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+
+// restored imports
 import 'package:frontend/screens/forgot_password_screen.dart';
 import 'package:frontend/screens/home_screen.dart';
-// Required for clean URL paths (removes the '#' from web URLs)
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 
-void main() {
-  // Call setPathUrlStrategy() to enable clean URLs (e.g., /login instead of /#/login)
-  // NOTE: If you see an error here, you must add flutter_web_plugins: to your pubspec.yaml file
+// Import the Game Selection Screen
+import 'screens/game_selection_screen.dart';
 
-  
+void main() {
   runApp(const MyApp());
 }
 
@@ -21,19 +21,32 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Find your teammate',
-      // Define a simple theme
+      
+      // Theme settings to match the dark look of your app
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark, // Enforces dark mode
+        ),
+        scaffoldBackgroundColor: const Color(0xFF111827), // Deep dark background
         useMaterial3: true,
       ),
-      // Set the default screen for when the app first loads
+
+      // Currently set to Game Selection for testing. 
+      // Change this to '/login' or '/home' when you want to start normally.
       initialRoute: '/home', 
+      
       routes: {
-        // Defines the paths for your main screens
+        // Restored routes so login/register works
         '/home': (context) => const HomeScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/forgottenpassword': (context) => const ForgotPasswordScreen(),
+        
+        // The new screen
+        '/gameselection': (context) => const GameSelectionScreen(),
+        
+        // NOTE: '/gameserver' is NOT here because it is dynamic (handled in game_selection_screen.dart)
       },
     );
   }
