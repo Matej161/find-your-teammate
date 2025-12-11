@@ -1,16 +1,59 @@
 {
   "version": 2,
-  "dgSpecHash": "vx4XRDVgXoM=",
+  "dgSpecHash": "FJGtCqxKnNs=",
   "success": true,
   "projectFilePath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\matej.silhan\\.nuget\\packages\\microsoft.aspnet.signalr.core\\2.4.3\\microsoft.aspnet.signalr.core.2.4.3.nupkg.sha512",
+    "C:\\Users\\matej.silhan\\.nuget\\packages\\microsoft.data.sqlite\\10.0.0-rc.2.25502.107\\microsoft.data.sqlite.10.0.0-rc.2.25502.107.nupkg.sha512",
+    "C:\\Users\\matej.silhan\\.nuget\\packages\\microsoft.data.sqlite.core\\10.0.0-rc.2.25502.107\\microsoft.data.sqlite.core.10.0.0-rc.2.25502.107.nupkg.sha512",
     "C:\\Users\\matej.silhan\\.nuget\\packages\\microsoft.owin\\2.1.0\\microsoft.owin.2.1.0.nupkg.sha512",
     "C:\\Users\\matej.silhan\\.nuget\\packages\\microsoft.owin.security\\2.1.0\\microsoft.owin.security.2.1.0.nupkg.sha512",
     "C:\\Users\\matej.silhan\\.nuget\\packages\\newtonsoft.json\\6.0.4\\newtonsoft.json.6.0.4.nupkg.sha512",
-    "C:\\Users\\matej.silhan\\.nuget\\packages\\owin\\1.0.0\\owin.1.0.0.nupkg.sha512"
+    "C:\\Users\\matej.silhan\\.nuget\\packages\\owin\\1.0.0\\owin.1.0.0.nupkg.sha512",
+    "C:\\Users\\matej.silhan\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.11\\sqlitepclraw.bundle_e_sqlite3.2.1.11.nupkg.sha512",
+    "C:\\Users\\matej.silhan\\.nuget\\packages\\sqlitepclraw.core\\2.1.11\\sqlitepclraw.core.2.1.11.nupkg.sha512",
+    "C:\\Users\\matej.silhan\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.11\\sqlitepclraw.lib.e_sqlite3.2.1.11.nupkg.sha512",
+    "C:\\Users\\matej.silhan\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.11\\sqlitepclraw.provider.e_sqlite3.2.1.11.nupkg.sha512",
+    "C:\\Users\\matej.silhan\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
   ],
   "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'Microsoft.Owin' 2.1.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-3rq8-h3gj-r5c6",
+      "projectPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
+      "libraryId": "Microsoft.Owin",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'Microsoft.Owin' 2.1.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-hxrm-9w7p-39cc",
+      "projectPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
+      "libraryId": "Microsoft.Owin",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'Newtonsoft.Json' 6.0.4 has a known high severity vulnerability, https://github.com/advisories/GHSA-5crp-9r3c-p9vr",
+      "projectPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
+      "libraryId": "Newtonsoft.Json",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
     {
       "code": "NU1701",
       "level": "Warning",

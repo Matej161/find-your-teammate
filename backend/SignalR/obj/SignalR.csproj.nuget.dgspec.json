@@ -4,28 +4,85 @@
     "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj": {}
   },
   "projects": {
-    "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj": {
+    "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
-        "projectName": "SignalR",
-        "projectPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
+        "projectUniqueName": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj",
+        "projectName": "Backend",
+        "projectPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj",
         "packagesPath": "C:\\Users\\matej.silhan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\obj\\",
+        "outputPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\Backend\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\matej.silhan\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\matej.silhan\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+                "projectPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Users\\matej.silhan\\.dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
+        "projectName": "DatabaseRepository",
+        "projectPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
+        "packagesPath": "C:\\Users\\matej.silhan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\matej.silhan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -42,9 +99,78 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.Data.Sqlite": {
+              "target": "Package",
+              "version": "[10.0.0-rc.2.25502.107, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Users\\matej.silhan\\.dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
+        "projectName": "SignalR",
+        "projectPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
+        "packagesPath": "C:\\Users\\matej.silhan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\SignalR\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\matej.silhan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj": {
+                "projectPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -71,7 +197,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\matej.silhan\\.dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\matej.silhan\\.dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
