@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {}
+    "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {}
   },
   "projects": {
-    "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+    "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
+        "projectUniqueName": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
         "projectName": "DatabaseRepository",
-        "projectPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
-        "packagesPath": "C:\\Users\\stepa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\obj\\",
+        "projectPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
+        "packagesPath": "C:\\Users\\matej.silhan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\matej.silhan\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\stepa\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\matej.silhan\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -36,9 +36,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -65,7 +65,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\matej.silhan\\.dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
