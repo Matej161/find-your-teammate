@@ -1,13 +1,18 @@
-﻿namespace SignalR;
+﻿namespace SignalR.Contracts;
 
-public interface ISignalRContracts
+public interface IChatClient
 {
-    void SendChatMessage(Message message);
-    void SendEditMessage(Guid messageid, Message message);
-    void SendDeleteMessage(Guid message);
-    void RecieveChatMessage(Action<Message> fn);
-    void RecieveEditMessage(Action<Guid,Message> fn);
-    void RecieveDeleteMessage(Action<Guid> fn);
-    
-    public record Message(Guid MessageId, string Content, DateTime TimeSent, Guid RoomId);
+    Task ReceiveChatMessage(Backend.Message message);
+    Task ReceiveEditMessage(Guid messageId, string newContent);
+    Task ReceiveDeleteMessage(Guid messageId);
+}
+
+public interface IChatServer
+{
+    Task JoinRoom(string roomName);
+    Task LeaveRoom(string roomName);
+
+    Task SendChatMessage(string roomName, string content, Guid userId);
+    Task SendEditMessage(Guid messageId, string newContent);
+    Task SendDeleteMessage(Guid messageId);
 }
