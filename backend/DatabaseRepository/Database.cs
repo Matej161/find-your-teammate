@@ -176,4 +176,55 @@ public static class Database
         _sqliteConnection.Close();
         return list;
     }
+
+    public static Data? ReadDataByField(Data blueprint, string tableName, string fieldName, string fieldValue)
+    {
+        if(!CheckForDatabaseConnected()) throw new DatabaseConnectedException();
+        _sqliteConnection.Open();
+        using var command = _sqliteConnection.CreateCommand();
+        command.CommandText = $"SELECT * FROM {tableName} WHERE {fieldName} = @value LIMIT 1";
+        command.Parameters.AddWithValue("@value", fieldValue);
+        using var reader = command.ExecuteReader();
+        
+        Data result = blueprint.CopyFormat();
+        int index = 0;
+        if (reader.Read())
+        {
+            while (result.Next() != null)
+            {
+                result.Add(reader.GetString(index + 1));
+                index++;
+            }
+            result.ResetIndex();
+            _sqliteConnection.Close();
+            return result;
+        }
+        
+        result.ResetIndex();
+        _sqliteConnection.Close();
+        return null;
+    }
+
+    public static Guid? GetIdByField(string tableName, string fieldName, string fieldValue)
+    {
+        if(!CheckForDatabaseConnected()) throw new DatabaseConnectedException();
+        _sqliteConnection.Open();
+        using var command = _sqliteConnection.CreateCommand();
+        command.CommandText = $"SELECT Id FROM {tableName} WHERE {fieldName} = @value LIMIT 1";
+        command.Parameters.AddWithValue("@value", fieldValue);
+        using var reader = command.ExecuteReader();
+        
+        if (reader.Read())
+        {
+            string idString = reader.GetString(0);
+            _sqliteConnection.Close();
+            if (Guid.TryParse(idString, out Guid userId))
+            {
+                return userId;
+            }
+        }
+        
+        _sqliteConnection.Close();
+        return null;
+    }
 }

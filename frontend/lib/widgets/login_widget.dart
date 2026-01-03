@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/login_service.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
@@ -10,6 +11,10 @@ class LoginWidget extends StatefulWidget {
 class _LoginWidgetState extends State<LoginWidget> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _loginService = LoginService();
+  
+  bool _isLoading = false;
+  String? _errorMessage;
 
   // Custom colors for a friendly, light look
   final Color primaryColor = const Color(0xFF4895ef); // Blue
@@ -21,6 +26,54 @@ class _LoginWidgetState extends State<LoginWidget> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    // Basic validation
+    if (email.isEmpty || password.isEmpty) {
+      setState(() {
+        _errorMessage = 'Please enter both email and password';
+      });
+      return;
+    }
+
+    // Email validation
+    if (!email.contains('@')) {
+      setState(() {
+        _errorMessage = 'Please enter a valid email address';
+      });
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final response = await _loginService.login(email, password);
+
+      if (response.success) {
+        // Login successful - navigate to home screen
+        if (mounted) {
+          Navigator.of(context).pushReplacementNamed('/home');
+        }
+      } else {
+        // Login failed - show error message
+        setState(() {
+          _isLoading = false;
+          _errorMessage = response.message ?? 'Login failed. Please try again.';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'An error occurred. Please try again.';
+      });
+    }
   }
 
   @override
@@ -95,6 +148,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               controller: _passwordController,
               obscureText: true,
               style: TextStyle(fontSize: inputFontSize),
+              onSubmitted: (_) => _handleLogin(),
               decoration: InputDecoration(
                 labelText: "Password",
                 prefixIcon: Icon(Icons.lock, color: primaryColor),
@@ -104,6 +158,21 @@ class _LoginWidgetState extends State<LoginWidget> {
               ),
             ),
             const SizedBox(height: 10),
+
+            // Error Message Display
+            if (_errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Text(
+                  _errorMessage!,
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.035,
+                    color: Colors.red,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
 
             // Forgot Password Link
             GestureDetector(
@@ -145,12 +214,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ],
               ),
               child: ElevatedButton(
-                onPressed: () {
-                  final email = _emailController.text;
-                  final password = _passwordController.text;
-                  print('Attempting login for: $email');
-                  // TODO: Implement actual login logic
-                },
+                onPressed: _isLoading ? null : _handleLogin,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent, // Important for gradient visibility
                   shadowColor: Colors.transparent, // Remove default shadow
@@ -159,15 +223,25 @@ class _LoginWidgetState extends State<LoginWidget> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
+                  disabledBackgroundColor: Colors.grey,
                 ),
-                child: Text(
-                  "L O G I N",
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.045, // Responsive font size
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                child: _isLoading
+                    ? SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : Text(
+                        "L O G I N",
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.045, // Responsive font size
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
             SizedBox(height: screenHeight * 0.04), // Responsive vertical spacing

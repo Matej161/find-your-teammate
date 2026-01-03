@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendRepository", "Backen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR", "SignalR\SignalR.csproj", "{A12CAACE-CC90-49B6-BC6C-44D65B784114}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindTeammate", "FindTeammate\FindTeammate.csproj", "{B8F3D1E5-9A2C-4B7D-8E1F-3C4D5E6F7A8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{A12CAACE-CC90-49B6-BC6C-44D65B784114}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A12CAACE-CC90-49B6-BC6C-44D65B784114}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A12CAACE-CC90-49B6-BC6C-44D65B784114}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8F3D1E5-9A2C-4B7D-8E1F-3C4D5E6F7A8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8F3D1E5-9A2C-4B7D-8E1F-3C4D5E6F7A8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8F3D1E5-9A2C-4B7D-8E1F-3C4D5E6F7A8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8F3D1E5-9A2C-4B7D-8E1F-3C4D5E6F7A8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

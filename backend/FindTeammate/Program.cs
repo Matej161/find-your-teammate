@@ -1,18 +1,36 @@
 using Database;
+using Backend;
+using FindTeammate.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// Register repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+// Register application services
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+// Add CORS support for Flutter web
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
-Database.Database.Connect();    
-Data data = Data.CreateDataFormat(["Name", "Age"]);
-Status.PrintInfo(Database.Database.ReadData(data.CopyFormat(), "Users", 3).ToString());
-Status.PrintInfo(Database.Database.ReadData(data.CopyFormat(), "Users", 2).ToString());
-Status.PrintInfo(Database.Database.ReadData(data.CopyFormat(), "Users", 1).ToString());
+Database.Database.Connect();
+// Create Users table if it doesn't exist
+Database.Database.CreateTableIfNotExists(User.Blueprint, User.Name);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -21,6 +39,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
+
+app.MapControllers();
 
 var summaries = new[]
 {
