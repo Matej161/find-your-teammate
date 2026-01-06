@@ -7,7 +7,7 @@ public class UserRepository : IUserRepository
     public User GetById(Guid id)
     {
         Data blueprint = Data.CreateDataFormat(User.Blueprint);
-        Data userData = Database.Database.ReadData(blueprint, User.Name, id);
+        Data userData = Database.Database.ReadData(blueprint, User.TableName, id);
         
         // Check if user exists (if data is empty, user doesn't exist)
         if (string.IsNullOrWhiteSpace(userData.GetDataByString("Email")))
@@ -21,7 +21,7 @@ public class UserRepository : IUserRepository
     public User[] GetAll()
     {
         Data blueprint = Data.CreateDataFormat(User.Blueprint);
-        List<Data> allUsersData = Database.Database.GetAll(blueprint, User.Name);
+        List<Data> allUsersData = Database.Database.GetAll(blueprint, User.TableName);
         
         List<User> users = new List<User>();
         foreach (var userData in allUsersData)
@@ -30,7 +30,7 @@ public class UserRepository : IUserRepository
             if (!string.IsNullOrWhiteSpace(email))
             {
                 // We need to get the ID - let's query by email to get ID
-                Guid? userId = Database.Database.GetIdByField(User.Name, "Email", email);
+                Guid? userId = Database.Database.GetIdByField(User.TableName, "Email", email);
                 if (userId.HasValue)
                 {
                     users.Add(new User(userId.Value));
@@ -48,7 +48,7 @@ public class UserRepository : IUserRepository
         userData.Add(entity.PasswordHash);
         userData.Add(entity.Name);
         
-        Database.Database.AddData(userData, User.Name, entity.Id);
+        Database.Database.AddData(userData, User.TableName, entity.Id);
         
         return entity;
     }
@@ -60,7 +60,7 @@ public class UserRepository : IUserRepository
         userData.Add(entity.PasswordHash);
         userData.Add(entity.Name);
         
-        Database.Database.UpdateOrCreateData(userData, User.Name, entity.Id);
+        Database.Database.UpdateOrCreateData(userData, User.TableName, entity.Id);
         
         return entity;
     }
@@ -79,20 +79,14 @@ public class UserRepository : IUserRepository
     // Additional method for finding user by email (needed for authentication)
     public User? GetByEmail(string email)
     {
-        Data blueprint = Data.CreateDataFormat(User.Blueprint);
-        Data? userData = Database.Database.ReadDataByField(blueprint, User.Name, "Email", email);
-        
-        if (userData == null || string.IsNullOrWhiteSpace(userData.GetDataByString("Email")))
-        {
-            return null;
-        }
-        
-        Guid? userId = Database.Database.GetIdByField(User.Name, "Email", email);
+        // First, try to get the user ID directly
+        Guid? userId = Database.Database.GetIdByField(User.TableName, "Email", email);
         if (!userId.HasValue)
         {
             return null;
         }
         
+        // If we found the ID, create the user object
         return new User(userId.Value);
     }
 }

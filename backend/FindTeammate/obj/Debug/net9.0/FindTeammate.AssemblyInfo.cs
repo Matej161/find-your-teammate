@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FindTeammate")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b73d74d12cbf86ca2dd38b6103f3fe778ef8f27e")]
 [assembly: System.Reflection.AssemblyProductAttribute("FindTeammate")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FindTeammate")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

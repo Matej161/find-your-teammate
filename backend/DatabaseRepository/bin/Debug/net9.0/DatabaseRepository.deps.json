@@ -45,9 +45,6 @@
         }
       },
       "SQLitePCLRaw.core/2.1.11": {
-        "dependencies": {
-          "System.Memory": "4.5.3"
-        },
         "runtime": {
           "lib/netstandard2.0/SQLitePCLRaw.core.dll": {
             "assemblyVersion": "2.1.11.2622",
@@ -184,8 +181,7 @@
             "fileVersion": "2.1.11.2622"
           }
         }
-      },
-      "System.Memory/4.5.3": {}
+      }
     }
   },
   "libraries": {
@@ -235,13 +231,6 @@
       "sha512": "sha512-Y/0ZkR+r0Cg3DQFuCl1RBnv/tmxpIZRU3HUvelPw6MVaKHwYYR8YNvgs0vuNuXCMvlyJ+Fh88U1D4tah1tt6qw==",
       "path": "sqlitepclraw.provider.e_sqlite3/2.1.11",
       "hashPath": "sqlitepclraw.provider.e_sqlite3.2.1.11.nupkg.sha512"
-    },
-    "System.Memory/4.5.3": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
-      "path": "system.memory/4.5.3",
-      "hashPath": "system.memory.4.5.3.nupkg.sha512"
     }
   }
 }

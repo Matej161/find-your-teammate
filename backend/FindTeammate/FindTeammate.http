@@ -1,6 +1,78 @@
 @FindTeammate_HostAddress = http://localhost:5266
 
-GET {{FindTeammate_HostAddress}}/weatherforecast/
-Accept: application/json
+### Test Register Endpoint - Valid Request
+POST {{FindTeammate_HostAddress}}/api/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Test123!",
+  "userName": "testuser"
+}
+
+### Test Register Endpoint - Invalid Email
+POST {{FindTeammate_HostAddress}}/api/register
+Content-Type: application/json
+
+{
+  "email": "invalid-email",
+  "password": "Test123!",
+  "userName": "testuser"
+}
+
+### Test Register Endpoint - Weak Password (no uppercase)
+POST {{FindTeammate_HostAddress}}/api/register
+Content-Type: application/json
+
+{
+  "email": "test2@example.com",
+  "password": "test123!",
+  "userName": "testuser2"
+}
+
+### Test Register Endpoint - Missing Special Character
+POST {{FindTeammate_HostAddress}}/api/register
+Content-Type: application/json
+
+{
+  "email": "test3@example.com",
+  "password": "Test123",
+  "userName": "testuser3"
+}
+
+### Test Login Endpoint - Valid Credentials
+POST {{FindTeammate_HostAddress}}/api/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Test123!"
+}
+
+### Test Login Endpoint - Invalid Email
+POST {{FindTeammate_HostAddress}}/api/login
+Content-Type: application/json
+
+{
+  "email": "wrong@example.com",
+  "password": "Test123!"
+}
+
+### Test Login Endpoint - Wrong Password
+POST {{FindTeammate_HostAddress}}/api/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "WrongPassword123!"
+}
+
+### Test Login Endpoint - Missing Fields
+POST {{FindTeammate_HostAddress}}/api/login
+Content-Type: application/json
+
+{
+  "email": ""
+}
 
 ###

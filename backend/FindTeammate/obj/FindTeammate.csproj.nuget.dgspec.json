@@ -1,31 +1,154 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tomas.urban\\Desktop\\FindTeammate 1\\FindTeammate\\FindTeammate.csproj": {}
+    "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\FindTeammate.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tomas.urban\\Desktop\\FindTeammate 1\\DatabaseRepository\\DatabaseRepository.csproj": {
+    "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\BackendRepository\\BackendRepository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tomas.urban\\Desktop\\FindTeammate 1\\DatabaseRepository\\DatabaseRepository.csproj",
-        "projectName": "DatabaseRepository",
-        "projectPath": "C:\\Users\\tomas.urban\\Desktop\\FindTeammate 1\\DatabaseRepository\\DatabaseRepository.csproj",
-        "packagesPath": "C:\\Users\\tomas.urban\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tomas.urban\\Desktop\\FindTeammate 1\\DatabaseRepository\\obj\\",
+        "projectUniqueName": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\BackendRepository\\BackendRepository.csproj",
+        "projectName": "BackendRepository",
+        "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\BackendRepository\\BackendRepository.csproj",
+        "packagesPath": "C:\\Users\\janfu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\BackendRepository\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\tomas.urban\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\janfu\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj": {
+                "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj"
+              },
+              "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+                "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj",
+        "projectName": "Backend",
+        "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj",
+        "packagesPath": "C:\\Users\\janfu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\Backend\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\janfu\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+                "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
+        "projectName": "DatabaseRepository",
+        "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
+        "packagesPath": "C:\\Users\\janfu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\janfu\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -44,7 +167,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -71,40 +194,40 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\tomas.urban\\Desktop\\FindTeammate 1\\FindTeammate\\FindTeammate.csproj": {
+    "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\FindTeammate.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tomas.urban\\Desktop\\FindTeammate 1\\FindTeammate\\FindTeammate.csproj",
+        "projectUniqueName": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\FindTeammate.csproj",
         "projectName": "FindTeammate",
-        "projectPath": "C:\\Users\\tomas.urban\\Desktop\\FindTeammate 1\\FindTeammate\\FindTeammate.csproj",
-        "packagesPath": "C:\\Users\\tomas.urban\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tomas.urban\\Desktop\\FindTeammate 1\\FindTeammate\\obj\\",
+        "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\FindTeammate.csproj",
+        "packagesPath": "C:\\Users\\janfu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\tomas.urban\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\janfu\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\tomas.urban\\Desktop\\FindTeammate 1\\DatabaseRepository\\DatabaseRepository.csproj": {
-                "projectPath": "C:\\Users\\tomas.urban\\Desktop\\FindTeammate 1\\DatabaseRepository\\DatabaseRepository.csproj"
+              "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\BackendRepository\\BackendRepository.csproj": {
+                "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\BackendRepository\\BackendRepository.csproj"
+              },
+              "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj": {
+                "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj"
+              },
+              "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+                "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
               }
             }
           }
@@ -119,12 +242,16 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.9, )"
@@ -149,7 +276,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

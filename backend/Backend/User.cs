@@ -4,7 +4,7 @@ namespace Backend;
 
 public class User
 {
-    public static string Name = "Users";
+    public static string TableName = "Users";
     public static List<string> Blueprint = ["Email", "PasswordHash", "Name"];
     
     public Guid Id { get; set; }
@@ -22,7 +22,7 @@ public class User
     
     public User(Guid id)
     {
-        Data data = Database.Database.ReadData(new Data(Blueprint), User.Name, id);
+        Data data = Database.Database.ReadData(new Data(Blueprint), User.TableName, id);
         Id = id;
         Email = data.GetDataByString("Email");
         PasswordHash = data.GetDataByString("PasswordHash");

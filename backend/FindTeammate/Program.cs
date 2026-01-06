@@ -1,6 +1,7 @@
 using Database;
 using Backend;
 using FindTeammate.Services;
+using FindTeammate.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +15,11 @@ builder.Services.AddControllers()
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-// Register repositories
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+// Initialize authentication database
+AuthDatabase.Initialize();
+
+// Register repositories - use AuthUserRepository for authentication
+builder.Services.AddScoped<IUserRepository, AuthUserRepository>();
 
 // Register application services
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -33,9 +37,9 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-Database.Database.Connect();
-// Create Users table if it doesn't exist
-Database.Database.CreateTableIfNotExists(User.Blueprint, User.Name);
+// Authentication database is initialized above via AuthDatabase.Initialize()
+// Old database connection kept for other features (SignalR, etc.) if needed
+// Database.Database.Connect();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

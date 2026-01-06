@@ -30,6 +30,17 @@ public class AuthenticationService : IAuthenticationService
             }
 
             // Verify password using BCrypt
+            // Check if password hash is valid BCrypt format
+            if (string.IsNullOrWhiteSpace(user.PasswordHash))
+            {
+                return new LoginResponse(false, "Password hash is empty or null", null, null);
+            }
+            
+            if (!user.PasswordHash.StartsWith("$2"))
+            {
+                return new LoginResponse(false, $"Invalid password hash format. Hash starts with: {user.PasswordHash.Substring(0, Math.Min(10, user.PasswordHash.Length))}", null, null);
+            }
+            
             if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             {
                 return new LoginResponse(false, "Invalid email or password", null, null);
@@ -37,9 +48,10 @@ public class AuthenticationService : IAuthenticationService
 
             return new LoginResponse(true, "Login successful", user.Id, user.Name);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return new LoginResponse(false, "An error occurred during login", null, null);
+            // Return more detailed error message for debugging
+            return new LoginResponse(false, $"An error occurred during login: {ex.Message}", null, null);
         }
     }
 
@@ -108,9 +120,10 @@ public class AuthenticationService : IAuthenticationService
 
             return new RegisterResponse(true, "Registration successful", userId, userName);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return new RegisterResponse(false, "An error occurred during registration", null, null);
+            // Return more detailed error message for debugging
+            return new RegisterResponse(false, $"An error occurred during registration: {ex.Message}", null, null);
         }
     }
 }
