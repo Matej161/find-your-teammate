@@ -14,9 +14,11 @@ public class Backend
         chat.CreateInitialTables();
         var userRepo = new SqliteRepository<User>();
         var roomRepo = new SqliteRepository<ChatRoom>();
+
+        var chatRoomService = new ChatRoomService(roomRepo);
         
-        var pepa = userRepo.Add(new User { Username = "Pepa", Email = "pepa@test.cz" });
-        var mistnost = roomRepo.Add(new ChatRoom { Name = "Obecný pokec" });
+        var pepa = userRepo.Add(new User { Username = "Pepa"});
+        var mistnost = chatRoomService.CreateChatRoom("Mistnost", pepa.Id);
 
         chat.SendMessage(pepa.Id, mistnost.Id, "Ahoj všichni!");
 
@@ -25,5 +27,7 @@ public class Backend
         {
             Console.WriteLine($"[{m.Timestamp}] {m.Content}");
         }
+        
+        chatRoomService.UserLeft(mistnost.Id);
     }
 }
