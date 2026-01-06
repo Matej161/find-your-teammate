@@ -91,9 +91,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       return;
     }
 
-    if (!RegExp(r'[!@#$%^&*()_+\-=\[\]{};\':"\\|,.<>\/?]').hasMatch(password)) {
+    // Check for special characters (excluding single quote to avoid string parsing issues)
+    if (!RegExp(r'[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]').hasMatch(password)) {
       setState(() {
-        _errorMessage = 'Password must contain at least one special character (!@#\$%^&*()_+-=[]{}|;\':"\\,.<>/? etc.)';
+        _errorMessage = 'Password must contain at least one special character (!@#\$%^&*()_+-=[]{}|;:"\\,.<>/? etc.)';
       });
       return;
     }

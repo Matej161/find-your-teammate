@@ -23,7 +23,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _authService = AuthService();
-  String? _initialRoute;
+  Widget? _initialHome;
   bool _isLoading = true;
 
   @override
@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> _checkAuthState() async {
     final isLoggedIn = await _authService.isLoggedIn();
     setState(() {
-      _initialRoute = isLoggedIn ? '/home' : '/login';
+      _initialHome = isLoggedIn ? const HomeScreen() : const LoginScreen();
       _isLoading = false;
     });
   }
@@ -62,8 +62,8 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      // Set the default screen based on auth state
-      initialRoute: _initialRoute ?? '/login', 
+      // Use home instead of initialRoute to avoid null value issues
+      home: _initialHome ?? const LoginScreen(),
       routes: {
         // Defines the paths for your main screens
         '/home': (context) => const HomeScreen(),
