@@ -69,6 +69,35 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       return;
     }
 
+    // Password complexity validation
+    if (!RegExp(r'[A-Z]').hasMatch(password)) {
+      setState(() {
+        _errorMessage = 'Password must contain at least one uppercase letter';
+      });
+      return;
+    }
+
+    if (!RegExp(r'[a-z]').hasMatch(password)) {
+      setState(() {
+        _errorMessage = 'Password must contain at least one lowercase letter';
+      });
+      return;
+    }
+
+    if (!RegExp(r'[0-9]').hasMatch(password)) {
+      setState(() {
+        _errorMessage = 'Password must contain at least one number';
+      });
+      return;
+    }
+
+    if (!RegExp(r'[!@#$%^&*()_+\-=\[\]{};\':"\\|,.<>\/?]').hasMatch(password)) {
+      setState(() {
+        _errorMessage = 'Password must contain at least one special character (!@#\$%^&*()_+-=[]{}|;\':"\\,.<>/? etc.)';
+      });
+      return;
+    }
+
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -179,10 +208,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               style: TextStyle(fontSize: inputFontSize),
               decoration: InputDecoration(
                 labelText: "Password",
+                hintText: "Min 6 chars, 1 uppercase, 1 lowercase, 1 number, 1 special",
                 prefixIcon: Icon(Icons.lock, color: primaryColor),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
+                helperText: "Must include: uppercase, lowercase, number, special char",
+                helperMaxLines: 2,
               ),
             ),
             const SizedBox(height: 16),

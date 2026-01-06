@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using FindTeammate.Attributes;
 
 namespace FindTeammate.DTOs;
 
@@ -18,6 +19,7 @@ public class RegisterRequest : IRegisterRequest
     [Required(ErrorMessage = "Password is required")]
     [MinLength(6, ErrorMessage = "Password must be at least 6 characters long")]
     [MaxLength(100, ErrorMessage = "Password cannot exceed 100 characters")]
+    [PasswordComplexity]
     public string Password { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Username is required")]

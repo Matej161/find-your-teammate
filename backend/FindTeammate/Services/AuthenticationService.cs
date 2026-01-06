@@ -65,6 +65,27 @@ public class AuthenticationService : IAuthenticationService
             return new RegisterResponse(false, "Password must be between 6 and 100 characters", null, null);
         }
 
+        // Validate password complexity
+        if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[A-Z]"))
+        {
+            return new RegisterResponse(false, "Password must contain at least one uppercase letter", null, null);
+        }
+
+        if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[a-z]"))
+        {
+            return new RegisterResponse(false, "Password must contain at least one lowercase letter", null, null);
+        }
+
+        if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[0-9]"))
+        {
+            return new RegisterResponse(false, "Password must contain at least one number", null, null);
+        }
+
+        if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]"))
+        {
+            return new RegisterResponse(false, "Password must contain at least one special character (!@#$%^&*()_+-=[]{}|;':\"\\,.<>/? etc.)", null, null);
+        }
+
         try
         {
             // Check if user with this email already exists using repository
