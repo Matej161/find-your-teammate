@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // 1. Import Firebase
 
 class RegisterWidget extends StatefulWidget {
   const RegisterWidget({super.key});
@@ -16,6 +17,93 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   // Custom colors matching the Login theme
   final Color primaryColor = const Color(0xFF4895ef); // Blue
   final Color secondaryColor = const Color(0xFF4cc9f0); // Light Blue/Teal
+
+  // --- NEW: REGISTER LOGIC ---
+  Future<void> _handleRegister() async {
+    // 0. Basic Validation: Check if passwords match
+    if (_passwordController.text.trim() != _confirmPasswordController.text.trim()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Passwords do not match.'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+      return; // Stop here, don't talk to Firebase
+    }
+
+    if (_usernameController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a username.'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+      return;
+    }
+
+    // A. Show loading circle
+    showDialog(
+      context: context,
+      barrierDismissible: false, 
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      // B. Create User in Firebase Backend
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      // Optional: Update the "DisplayName" property in Firebase with the username
+      // This is helpful so you can welcome them by name later!
+      if (userCredential.user != null) {
+        await userCredential.user!.updateDisplayName(_usernameController.text.trim());
+      }
+
+      // C. Close the loading circle
+      if (mounted) Navigator.pop(context);
+
+      if (mounted) {
+        // D. SUCCESS NOTIFICATION
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Registration Successful! Welcome.'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+        
+        // E. Navigate to Game Selection
+        // pushReplacementNamed removes the register screen so they can't go back
+        Navigator.of(context).pushReplacementNamed('/gameselection');
+      }
+
+    } on FirebaseAuthException catch (e) {
+      // C. Close the loading circle
+      if (mounted) Navigator.pop(context);
+
+      // D. FAILURE NOTIFICATION
+      String message = 'An error occurred';
+      if (e.code == 'weak-password') {
+        message = 'The password provided is too weak.';
+      } else if (e.code == 'email-already-in-use') {
+        message = 'The account already exists for that email.';
+      } else if (e.code == 'invalid-email') {
+        message = 'The email address is not valid.';
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    }
+  }
+  // ------------------------
 
   @override
   void dispose() {
@@ -149,12 +237,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 ],
               ),
               child: ElevatedButton(
-                onPressed: () {
-                  final username = _usernameController.text;
-                  final email = _emailController.text;
-                  print('Register attempt for: $username ($email)');
-                  // TODO: Add registration logic
-                },
+                // --- CALL THE NEW FUNCTION HERE ---
+                onPressed: _handleRegister,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   shadowColor: Colors.transparent,

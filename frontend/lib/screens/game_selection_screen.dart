@@ -23,6 +23,15 @@ class GameSelectionScreen extends StatelessWidget {
 
   // --- Logout Action (Navigates to /home) ---
   void _logout(BuildContext context) {
+    // Show notification (SnackBar)
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('You logged out!'),
+        backgroundColor: Colors.redAccent, // Red to signify logout
+        duration: Duration(seconds: 2),
+      ),
+    );
+
     // Navigate to the /home route and clear navigation stack (logging out)
     Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
   }

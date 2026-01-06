@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; 
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
@@ -15,6 +16,64 @@ class _LoginWidgetState extends State<LoginWidget> {
   final Color primaryColor = const Color(0xFF4895ef); // Blue
   final Color secondaryColor = const Color(0xFF4cc9f0); // Light Blue/Teal
   final Color accentColor = const Color(0xFFF77F00); // Orange
+
+  // --- LOGIN LOGIC ---
+  Future<void> _handleLogin() async {
+    // A. Show a loading circle so user knows something is happening
+    showDialog(
+      context: context,
+      barrierDismissible: false, 
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      // B. Talk to Firebase Backend
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      // C. Close the loading circle
+      if (mounted) Navigator.pop(context);
+
+      if (mounted) {
+        // D. SUCCESS NOTIFICATION
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Login Successful! Welcome back.'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+        
+        // E. Navigate
+        Navigator.of(context).pushReplacementNamed('/gameselection');
+      }
+
+    } on FirebaseAuthException catch (e) {
+      // C. Close the loading circle
+      if (mounted) Navigator.pop(context);
+
+      // D. FAILURE NOTIFICATION
+      String message = 'An error occurred';
+      if (e.code == 'user-not-found') {
+        message = 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        message = 'Wrong password provided.';
+      } else if (e.code == 'invalid-email') {
+        message = 'The email address is not valid.';
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -138,11 +197,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ],
               ),
               child: ElevatedButton(
-                onPressed: () {
-                  // Simply navigate to the Game Selection screen on click
-                  // In a real app, you would validate the email/password first
-                  Navigator.of(context).pushReplacementNamed('/gameselection');
-                },
+                onPressed: _handleLogin, 
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent, 
                   shadowColor: Colors.transparent, 
@@ -188,6 +243,24 @@ class _LoginWidgetState extends State<LoginWidget> {
                   ),
                 ),
               ],
+            ),
+
+            // --- DEV SKIP BUTTON ---
+            SizedBox(height: screenHeight * 0.02),
+            TextButton(
+              onPressed: () {
+                // Skips login logic and goes straight to games
+                Navigator.of(context).pushReplacementNamed('/gameselection');
+              },
+              child: const Text(
+                "Skip Login (Dev Mode)",
+                style: TextStyle(
+                  color: Colors.grey, 
+                  fontSize: 12,
+                  fontStyle: FontStyle.italic,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
             ),
           ],
         ),
