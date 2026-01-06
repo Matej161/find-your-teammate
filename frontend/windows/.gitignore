@@ -11,6 +11,7 @@ x64/
 x86/
 backend/Backend/obj
 backend/BackendRepository/obj
+backend/SignalIR/obj
 # Visual Studio cache files
 # files ending in .cache can be ignored
 *.[Cc]ache

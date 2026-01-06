@@ -8,6 +8,7 @@ GeneratedPluginRegistrant.java
 .cxx/
 backend/Backend/obj
 backend/BackendRepository/obj
+backend/SignalIR/obj
 # Remember to never publicly share your keystore.
 # See https://flutter.dev/to/reference-keystore
 key.properties

@@ -20,6 +20,7 @@ obj/
 out/
 backend/Backend/obj
 backend/BackendRepository/obj
+backend/SignalIR/obj
 Visual Studio files
 .vs/
 *.user
