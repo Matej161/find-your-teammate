@@ -5,6 +5,12 @@ import 'package:frontend/screens/forgot_password_screen.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
+// --- 1. FIREBASE IMPORTS ---
+// Required to initialize the Firebase "Engine"
+import 'package:firebase_core/firebase_core.dart';
+// This file was created by the 'flutterfire configure' command
+// It contains the API keys for Android and iOS
+import 'firebase_options.dart';
 
 // Import the Game Selection Screen
 import 'screens/game_selection_screen.dart';
