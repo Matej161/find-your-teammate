@@ -1,8 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/login_button_widget.dart';
+import 'package:frontend/widgets/login_button_widget.dart'; // Assuming this import path is correct
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  // --- HELPER WIDGET FOR THE FEATURE LIST ---
+  // This creates the Icon + Text rows
+  Widget _buildFeatureItem({
+    required IconData icon, 
+    required String title, 
+    required String subtitle,
+    required Color color,
+  }) {
+    return Row(
+      children: [
+        // Circular Icon Background
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1), // Light pastel background
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: color, size: 28),
+        ),
+        const SizedBox(width: 16),
+        // Text Info
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF37474F),
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +61,15 @@ class HomeScreen extends StatelessWidget {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        // Blue Gradient Background (Matches your reference)
+        // Blue Gradient Background (Modified for less brightness at the top)
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFFE3F2FD), // Light Blue
+              // Changed the top color from 0xFFE3F2FD (very light) to 
+              // 0xFFBBDEFB (slightly muted/medium-light blue)
+              Color(0xFFBBDEFB), // Muted Light Blue
               Color(0xFF90CAF9), // Medium Blue
             ],
           ),
@@ -72,8 +122,7 @@ class HomeScreen extends StatelessWidget {
 
                           const SizedBox(height: 30),
 
-                          // 2. FEATURE LIST (Fills the empty space)
-                          // I created a helper method below to keep this clean
+                          // 2. FEATURE LIST 
                           _buildFeatureItem(
                             icon: Icons.groups_rounded, 
                             title: "Find Teammates",
@@ -154,54 +203,6 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  // --- HELPER WIDGET FOR THE FEATURE LIST ---
-  // This creates the Icon + Text rows
-  Widget _buildFeatureItem({
-    required IconData icon, 
-    required String title, 
-    required String subtitle,
-    required Color color,
-  }) {
-    return Row(
-      children: [
-        // Circular Icon Background
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1), // Light pastel background
-            shape: BoxShape.circle,
-          ),
-          child: Icon(icon, color: color, size: 28),
-        ),
-        const SizedBox(width: 16),
-        // Text Info
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF37474F),
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.grey.shade600,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

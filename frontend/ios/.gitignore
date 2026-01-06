@@ -32,3 +32,6 @@ Runner/GeneratedPluginRegistrant.*
 !default.mode2v3
 !default.pbxuser
 !default.perspectivev3
+backend/BackendRepository/obj
+backend/Backend/obj
+backend/SignalR/obj
