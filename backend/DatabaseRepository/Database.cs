@@ -1,179 +1,254 @@
-﻿using Database.exceptions;
+﻿using System.Reflection;
 using Microsoft.Data.Sqlite;
-using static Database.Status;
-
-namespace Database;
 
 public static class Database
 {
-    private static SqliteConnection? _sqliteConnection = null;
-    
-    public static void Connect()
-    {
-        PrintInfo("Trying to connect to the database...");
-        if (CheckForDatabaseConnected()) throw new DatabaseConnectedException();
-        else
-            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
-            {
-                var ex = (Exception)args.ExceptionObject;
-                PrintException(ex.Message);
-            };
-        _sqliteConnection = new SqliteConnection("Data Source=database.db");
-        PrintSuccess("Successfully connected to the database.");
-    }
+    private const string DatabasePath = "Data Source=data.db";
 
-    private static bool CheckForDatabaseConnected()
-    {
-        return _sqliteConnection != null;
-    }
+    private static string GetTableName<T>() where T : class => typeof(T).Name;
 
-    public static Data ReadData(Data blueprint, string name, Guid id)
+    public static void CreateTable<T>() where T : class
     {
-        if(!CheckForDatabaseConnected()) throw new DatabaseConnectedException();
-        _sqliteConnection.Open();
-        using var command = _sqliteConnection.CreateCommand();
-        command.CommandText = $"SELECT * FROM {name} WHERE Id = @id";
-        command.Parameters.AddWithValue("@id", id);
-        using var reader = command.ExecuteReader();
-        int index = 0;
-        if (reader.Read())
+        string tableName = GetTableName<T>();
+        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        var columnDefinitions = new List<string>();
+
+        foreach (var prop in properties)
         {
-            while (blueprint.Next() != null)
+            if (prop.Name.Equals("Id", StringComparison.OrdinalIgnoreCase))
             {
-                blueprint.Add(reader.GetString(index + 1));
-                index++;
+                columnDefinitions.Add("Id TEXT PRIMARY KEY NOT NULL");
+            }
+            else
+            {
+                string sqlDataType = GetSqliteType(prop.PropertyType);
+                if (!string.IsNullOrEmpty(sqlDataType))
+                {
+                    columnDefinitions.Add($"{prop.Name} {sqlDataType}");
+                }
             }
         }
-
-        blueprint.ResetIndex();
         
-        _sqliteConnection.Close();
-        return blueprint;
-    }
+        string columnsSql = string.Join(", ", columnDefinitions);
+        string createSql = $"CREATE TABLE IF NOT EXISTS {tableName} ({columnsSql});";
 
-    public static void UpdateOrCreateData(Data dataToSave, string name, Guid id)
-    {
-        if(!CheckForDatabaseConnected()) throw new DatabaseConnectedException();
-        _sqliteConnection.Open();
-        using var command = _sqliteConnection.CreateCommand();
-        command.CommandText = $"INSERT OR REPLACE INTO {name} VALUES ({id.ToString()}";
-        try
+        using (var connection = new SqliteConnection(DatabasePath))
         {
-            string data = "";
-            while ((data = dataToSave.Next()) != null)
-            {
-                command.CommandText += ",";
-                command.CommandText += '"' + data + '"';
-            }
-
-            command.CommandText += ");";
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = createSql;
+            command.ExecuteNonQuery();
         }
-        catch (Exception e)
-        {
-            PrintError("Got exception: " + e.Message);
-            throw;
-        }
-        PrintInfo(command.CommandText);
-        command.ExecuteNonQuery();
-        _sqliteConnection.Close(); 
-    }
-
-    public static void CreateTableIfNotExists(List<string> blueprint, string name)
-    {
-        if(!CheckForDatabaseConnected()) throw new DatabaseConnectedException();
-        _sqliteConnection.Open();
-        using var command = _sqliteConnection.CreateCommand();
-        command.CommandText = $"CREATE TABLE IF NOT EXISTS {name}(Id TEXT PRIMARY KEY, ";
-        for (int i = 0; i < blueprint.Count; i++)
-        {
-            if(i != 0) command.CommandText += ",";
-            command.CommandText += blueprint[i];
-            
-        }
-
-        command.CommandText += ");";
-        
-        command.ExecuteNonQuery();
-        _sqliteConnection.Close();
-    }
-
-    public static void ChangeData(Data dataToSave, string name, Guid id)
-    {
-        if(!CheckForDatabaseConnected()) throw new DatabaseConnectedException();
-        _sqliteConnection.Open();
-        using var command = _sqliteConnection.CreateCommand();
-        command.CommandText = $"UPDATE {name} SET ";
-        try
-        {
-            int index = 0;
-            while (true)
-            {
-                if(index != 0) command.CommandText += ", ";
-                command.CommandText += dataToSave.GetNameByIndex(index) + " = '" + dataToSave.GetDataByString(dataToSave.GetNameByIndex(index)) + "'";
-            }
-        }
-        catch (Exception e)
-        {
-            
-        }
-        command.CommandText += $"WHERE Id = {id}";
-        command.ExecuteNonQuery();
-        _sqliteConnection.Close();
+        Console.WriteLine($"Tabulka '{tableName}' byla úspěšně vytvořena.");
     }
     
-    public static void AddData(Data dataToSave, string name, Guid id)
+    public static void Insert<T>(T item) where T : class, new()
     {
-        if(!CheckForDatabaseConnected()) throw new DatabaseConnectedException();
-        _sqliteConnection.Open();
-        using var command = _sqliteConnection.CreateCommand();
-        command.CommandText = $"INSERT INTO {name} VALUES ({id.ToString()}";
-        try
-        {
-            string data = "";
-            while ((data = dataToSave.Next()) != null)
-            {
-                command.CommandText += ",";
-                command.CommandText += '"' + data + '"';
-            }
+        string tableName = GetTableName<T>();
+        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-            command.CommandText += ");";
-        }
-        catch (Exception e)
-        {
-            PrintError("Got exception: " + e.Message);
-            throw;
-        }
-        PrintInfo(command.CommandText);
-        command.ExecuteNonQuery();
-        _sqliteConnection.Close(); 
-    }
+        var insertColumns = new List<string>();
+        var insertParams = new List<string>();
 
-    public static List<Data> GetAll(Data blueprint, string name)
-    {
-        if(!CheckForDatabaseConnected()) throw new DatabaseConnectedException();
-        _sqliteConnection.Open();
-        using var command = _sqliteConnection.CreateCommand();
-        command.CommandText = $"SELECT * FROM {name}";
-        using var reader = command.ExecuteReader();
-        int index = 0;
-        List<Data> list = new List<Data>();
-        Data current = blueprint.CopyFormat();
-        if (reader.Read())
+        foreach (var prop in properties)
         {
-            if (current.Next() == null)
-            {
-                current.ResetIndex();
-                list.Add(current);
-                current = blueprint.CopyFormat();
-            }
-            current.Add(reader.GetString(index + 1));
-            index++;
+            insertColumns.Add(prop.Name);
+            insertParams.Add($"@{prop.Name}");
         }
-        list.Add(current);
 
-        blueprint.ResetIndex();
+        string columnsSql = string.Join(", ", insertColumns);
+        string paramsSql = string.Join(", ", insertParams);
         
-        _sqliteConnection.Close();
-        return list;
+        string insertSql = $"INSERT INTO {tableName} ({columnsSql}) VALUES ({paramsSql});";
+
+        var idProperty = properties.FirstOrDefault(p => p.Name.Equals("Id", StringComparison.OrdinalIgnoreCase));
+        if (idProperty != null && (Guid)idProperty.GetValue(item) == Guid.Empty)
+        {
+            idProperty.SetValue(item, Guid.NewGuid());
+        }
+
+        using (var connection = new SqliteConnection(DatabasePath))
+        {
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = insertSql;
+
+            foreach (var prop in properties)
+            {
+                object value = prop.GetValue(item);
+
+                // Ošetření GUID na string
+                if (prop.PropertyType == typeof(Guid))
+                {
+                    value = value?.ToString();
+                }
+
+                // KLÍČOVÁ OPRAVA: Pokud je hodnota null, musí se poslat DBNull.Value
+                command.Parameters.AddWithValue($"@{prop.Name}", value ?? DBNull.Value);
+            }
+            
+            command.ExecuteNonQuery();
+        }
+        Console.WriteLine($"Záznam ID: {((Guid)idProperty.GetValue(item)).ToString().Substring(0, 8)}... vložen do tabulky '{tableName}'.");
+    }
+    
+    public static List<T> GetAll<T>() where T : class, new()
+    {
+        string tableName = GetTableName<T>();
+        var items = new List<T>();
+        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        string selectSql = $"SELECT * FROM {tableName};";
+
+        using (var connection = new SqliteConnection(DatabasePath))
+        {
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = selectSql;
+
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    T item = new T();
+                    foreach (var prop in properties)
+                    {
+                        try
+                        {
+                            int ordinal = reader.GetOrdinal(prop.Name);
+                            object dbValue = reader.GetValue(ordinal);
+
+                            if (dbValue is DBNull) continue;
+
+                            if (prop.PropertyType == typeof(Guid))
+                            {
+                                prop.SetValue(item, Guid.Parse(dbValue.ToString()));
+                            }
+                            else
+                            {
+                                prop.SetValue(item, Convert.ChangeType(dbValue, prop.PropertyType));
+                            }
+                        }
+                        catch (IndexOutOfRangeException)
+                        {
+                        }
+                    }
+                    items.Add(item);
+                }
+            }
+        }
+        return items;
+    }
+    
+    public static T GetById<T>(Guid id) where T : class, new()
+    {
+        string tableName = GetTableName<T>();
+        string selectSql = $"SELECT * FROM {tableName} WHERE Id = @Id;";
+
+        using (var connection = new SqliteConnection(DatabasePath))
+        {
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = selectSql;
+            command.Parameters.AddWithValue("@Id", id.ToString());
+
+            using (var reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    T item = new T();
+                    var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+                    foreach (var prop in properties)
+                    {
+                        try
+                        {
+                            int ordinal = reader.GetOrdinal(prop.Name);
+                            object dbValue = reader.GetValue(ordinal);
+
+                            if (dbValue is DBNull) continue;
+
+                            if (prop.PropertyType == typeof(Guid))
+                            {
+                                prop.SetValue(item, Guid.Parse(dbValue.ToString()));
+                            }
+                            else
+                            {
+                                prop.SetValue(item, Convert.ChangeType(dbValue, prop.PropertyType));
+                            }
+                        }
+                        catch (IndexOutOfRangeException) { }
+                    }
+                    return item;
+                }
+            }
+        }
+        return default(T); 
+    }
+    
+    public static void Update<T>(T item) where T : class
+    {
+        string tableName = GetTableName<T>();
+        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+        var setClauses = new List<string>();
+        var idProperty = properties.FirstOrDefault(p => p.Name.Equals("Id", StringComparison.OrdinalIgnoreCase));
+        
+        if (idProperty == null)
+            throw new InvalidOperationException("Model musí obsahovat vlastnost 'Id' pro aktualizaci.");
+
+        foreach (var prop in properties)
+        {
+            if (!prop.Name.Equals("Id", StringComparison.OrdinalIgnoreCase))
+            {
+                setClauses.Add($"{prop.Name} = @{prop.Name}");
+            }
+        }
+
+        string setSql = string.Join(", ", setClauses);
+        string updateSql = $"UPDATE {tableName} SET {setSql} WHERE Id = @Id;";
+
+        using (var connection = new SqliteConnection(DatabasePath))
+        {
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = updateSql;
+            
+            foreach (var prop in properties)
+            {
+                object value = prop.PropertyType == typeof(Guid) 
+                    ? prop.GetValue(item).ToString() 
+                    : prop.GetValue(item);
+                command.Parameters.AddWithValue($"@{prop.Name}", value);
+            }
+
+            int rows = command.ExecuteNonQuery();
+            Console.WriteLine($"\nAktualizováno řádků v tabulce '{tableName}': {rows}.");
+        }
+    } 
+    public static void Delete<T>(Guid id) where T : class
+    {
+        string tableName = GetTableName<T>();
+        string deleteSql = $"DELETE FROM {tableName} WHERE Id = @Id;";
+
+        using (var connection = new SqliteConnection(DatabasePath))
+        {
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = deleteSql;
+            
+            command.Parameters.AddWithValue("@Id", id.ToString());
+
+            int rows = command.ExecuteNonQuery();
+            Console.WriteLine($"\nZáznam ID: {id.ToString().Substring(0, 8)}... byl smazán z tabulky '{tableName}'. Počet smazaných řádků: {rows}.");
+        }
+    }
+    
+    private static string GetSqliteType(Type type)
+    {
+        if (type == typeof(string) || type == typeof(Guid)) return "TEXT";
+        if (type == typeof(int) || type == typeof(long) || type == typeof(bool)) return "INTEGER";
+        if (type == typeof(double) || type == typeof(float) || type == typeof(decimal)) return "REAL";
+        if (type == typeof(DateTime)) return "TEXT";
+        return null;
     }
 }

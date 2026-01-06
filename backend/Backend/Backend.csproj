@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DatabaseRepository\DatabaseRepository.csproj" />
+      <Content Include="bin\Debug\net9.0\database.db" />
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="bin\Debug\net9.0\database.db" />
+      <ProjectReference Include="..\DatabaseRepository\DatabaseRepository.csproj" />
     </ItemGroup>
 
 </Project>

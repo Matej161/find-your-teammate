@@ -1,6 +1,4 @@
-﻿using Database;
-
-namespace Backend;
+﻿namespace Backend;
 
 public class Backend
 {
@@ -12,15 +10,20 @@ public class Backend
 
     public Backend()
     {
-        Database.Database.Connect();
-        CreateTables();
-    }
+        var chat = new ChatManager();
+        chat.CreateInitialTables();
+        var userRepo = new SqliteRepository<User>();
+        var roomRepo = new SqliteRepository<ChatRoom>();
+        
+        var pepa = userRepo.Add(new User { Username = "Pepa", Email = "pepa@test.cz" });
+        var mistnost = roomRepo.Add(new ChatRoom { Name = "Obecný pokec" });
 
-    public void CreateTables()
-    {
-        Database.Database.CreateTableIfNotExists(ChatRoom.Blueprint, ChatRoom.Name);
-    }
+        chat.SendMessage(pepa.Id, mistnost.Id, "Ahoj všichni!");
 
-    private string message = "";
-    private int cooldown = 1500;
+        var history = chat.GetRoomHistory(mistnost.Id);
+        foreach (var m in history)
+        {
+            Console.WriteLine($"[{m.Timestamp}] {m.Content}");
+        }
+    }
 }

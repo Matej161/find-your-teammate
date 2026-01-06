@@ -1,9 +1,7 @@
 ﻿using Backend;
 using Microsoft.AspNet.SignalR;
 
-using Microsoft.AspNet.SignalR.Hubs;
 using SignalR.Contracts;
-using Message = Backend.Message;
 
 namespace SignalR;
 
@@ -12,7 +10,7 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
     
 
     public ChatRoom ChatRoom { get; set; }
-    public Message  Message { get; set; }
+    public ChatMessage  Message { get; set; }
     public Task JoinRoom(string roomName)
     {
         Groups.Add(Context.ConnectionId, roomName);
@@ -28,17 +26,20 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
 
     public async Task SendChatMessage(string roomName, string content, Guid userId)
     {
-        var message = new Message(
-            Guid.NewGuid(),
-            Guid.Empty,
+        
+        //tady to potrebuji zmenit
+        
+        
+        
+        /*var message = new ChatMessage() {Id = Guid.NewGuid(),
+            SenderId = userId,
             content,
             DateTime.UtcNow,
-            userId
-        );
+            userId};
 
         await Clients
             .Group(roomName)
-            .ReceiveChatMessage(message);
+            .ReceiveChatMessage(message);*/
     }
 
     public async Task SendEditMessage(Guid messageId, string newContent)

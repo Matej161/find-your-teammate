@@ -2,11 +2,8 @@
 
 public class User
 {
-    private int _id;
-    private string _name;
-    
-    public User(int id)
-    {
-        _id = id;
-    }
+    public Guid Id { get; set; }
+    public string Username { get; set; }
+    public string Email { get; set; }
+    public string PasswordHash { get; set; }
 }
