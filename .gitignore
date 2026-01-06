@@ -7,8 +7,8 @@
 .buildlog/
 .history
 
-
-
+backend/BackendRepository/obj
+backend/Backend/obj
 # Flutter repo-specific
 /bin/cache/
 /bin/internal/bootstrap.bat

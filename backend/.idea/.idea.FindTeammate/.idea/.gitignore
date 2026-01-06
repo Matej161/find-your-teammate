@@ -18,7 +18,8 @@ Build outputs
 bin/
 obj/
 out/
-
+backend/Backend/obj
+backend/BackendRepository/obj
 Visual Studio files
 .vs/
 *.user
