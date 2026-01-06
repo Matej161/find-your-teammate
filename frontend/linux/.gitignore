@@ -1,1 +1,4 @@
 flutter/ephemeral
+backend/BackendRepository/obj
+backend/Backend/obj
+backend/SignalR/obj
