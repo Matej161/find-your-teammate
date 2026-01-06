@@ -18,12 +18,18 @@ public class LoginController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+        // Automatic model validation using Data Annotations
+        if (!ModelState.IsValid)
         {
-            return BadRequest(new LoginResponse(false, "Email and password are required", null, null));
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+            return BadRequest(new LoginResponse(false, string.Join("; ", errors), null, null));
         }
 
-        var result = await _authenticationService.LoginAsync(request.Email, request.Password);
+        // Trim and sanitize inputs
+        var email = request.Email.Trim().ToLowerInvariant();
+        var password = request.Password;
+
+        var result = await _authenticationService.LoginAsync(email, password);
 
         if (result.Success)
         {

@@ -30,6 +30,7 @@ environment:
 dependencies:
   signalr_netcore: ^1.3.7
   http: ^1.2.0
+  shared_preferences: ^2.2.2
 
   flutter:
     sdk: flutter

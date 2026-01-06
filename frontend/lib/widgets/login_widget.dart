@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/login_service.dart';
+import '../services/auth_service.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
@@ -12,6 +13,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _loginService = LoginService();
+  final _authService = AuthService();
   
   bool _isLoading = false;
   String? _errorMessage;
@@ -57,6 +59,11 @@ class _LoginWidgetState extends State<LoginWidget> {
       final response = await _loginService.login(email, password);
 
       if (response.success) {
+        // Save user session
+        if (response.userId != null && response.userName != null) {
+          await _authService.saveUserSession(response.userId!, response.userName!);
+        }
+        
         // Login successful - navigate to home screen
         if (mounted) {
           Navigator.of(context).pushReplacementNamed('/home');

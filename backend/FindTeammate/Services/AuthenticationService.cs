@@ -45,6 +45,7 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<RegisterResponse> RegisterAsync(string email, string password, string userName)
     {
+        // Input validation (additional safety check - Data Annotations should catch most)
         if (string.IsNullOrWhiteSpace(email) ||
             string.IsNullOrWhiteSpace(password) ||
             string.IsNullOrWhiteSpace(userName))
@@ -52,16 +53,16 @@ public class AuthenticationService : IAuthenticationService
             return new RegisterResponse(false, "Email, password, and username are required", null, null);
         }
 
-        // Validate email format
-        if (!email.Contains('@') || !email.Contains('.'))
+        // Validate username length (additional check)
+        if (userName.Length < 3 || userName.Length > 50)
         {
-            return new RegisterResponse(false, "Please enter a valid email address", null, null);
+            return new RegisterResponse(false, "Username must be between 3 and 50 characters", null, null);
         }
 
-        // Validate password length
-        if (password.Length < 6)
+        // Validate password length (additional check)
+        if (password.Length < 6 || password.Length > 100)
         {
-            return new RegisterResponse(false, "Password must be at least 6 characters long", null, null);
+            return new RegisterResponse(false, "Password must be between 6 and 100 characters", null, null);
         }
 
         try

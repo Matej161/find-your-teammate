@@ -18,14 +18,19 @@ public class RegisterController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        if (string.IsNullOrWhiteSpace(request.Email) ||
-            string.IsNullOrWhiteSpace(request.Password) ||
-            string.IsNullOrWhiteSpace(request.UserName))
+        // Automatic model validation using Data Annotations
+        if (!ModelState.IsValid)
         {
-            return BadRequest(new RegisterResponse(false, "Email, password, and username are required", null, null));
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+            return BadRequest(new RegisterResponse(false, string.Join("; ", errors), null, null));
         }
 
-        var result = await _authenticationService.RegisterAsync(request.Email, request.Password, request.UserName);
+        // Trim and sanitize inputs
+        var email = request.Email.Trim().ToLowerInvariant();
+        var password = request.Password;
+        var userName = request.UserName.Trim();
+
+        var result = await _authenticationService.RegisterAsync(email, password, userName);
 
         if (result.Success)
         {

@@ -4,6 +4,7 @@ import 'package:frontend/screens/home_screen.dart';
 // Required for clean URL paths (removes the '#' from web URLs)
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
+import 'services/auth_service.dart';
 
 void main() {
   // Call setPathUrlStrategy() to enable clean URLs (e.g., /login instead of /#/login)
@@ -13,11 +14,46 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final _authService = AuthService();
+  String? _initialRoute;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthState();
+  }
+
+  Future<void> _checkAuthState() async {
+    final isLoggedIn = await _authService.isLoggedIn();
+    setState(() {
+      _initialRoute = isLoggedIn ? '/home' : '/login';
+      _isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      // Show loading screen while checking auth state
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      );
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Find your teammate',
@@ -26,8 +62,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      // Set the default screen for when the app first loads
-      initialRoute: '/home', 
+      // Set the default screen based on auth state
+      initialRoute: _initialRoute ?? '/login', 
       routes: {
         // Defines the paths for your main screens
         '/home': (context) => const HomeScreen(),
