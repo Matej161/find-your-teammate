@@ -9,7 +9,7 @@
 
 backend/BackendRepository/obj
 backend/Backend/obj
-backend/SignalIR/obj
+backend/SignalR/obj
 # Flutter repo-specific
 /bin/cache/
 /bin/internal/bootstrap.bat
