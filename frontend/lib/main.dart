@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-
-// --- 1. FIREBASE IMPORTS ---
-// Required to initialize the Firebase "Engine"
-import 'package:firebase_core/firebase_core.dart';
-// This file was created by the 'flutterfire configure' command
-// It contains the API keys for Android and iOS
-import 'firebase_options.dart';
-
-// Restored imports
+import 'package:google_fonts/google_fonts.dart';
+// restored imports
 import 'package:frontend/screens/forgot_password_screen.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'screens/login_screen.dart';
@@ -48,6 +41,11 @@ class MyApp extends StatelessWidget {
           seedColor: Colors.blue,
           brightness: Brightness.dark, // Enforces dark mode
         ),
+        
+        /*textTheme: GoogleFonts.quicksandTextTheme(
+          Theme.of(context).textTheme,
+        ),*/
+        
         scaffoldBackgroundColor: const Color(0xFF111827), // Deep dark background
         useMaterial3: true,
       ),
