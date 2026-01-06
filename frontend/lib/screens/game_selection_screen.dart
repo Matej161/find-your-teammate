@@ -19,7 +19,6 @@ class GameSelectionScreen extends StatelessWidget {
   void _navigateToProfile(BuildContext context) {
     // Assuming a /profile route exists, or just show a message for now
     print('Navigating to User Profile...');
-    // If you had a /profile route: Navigator.of(context).pushNamed('/profile');
   }
 
   // --- Logout Action (Navigates to /home) ---
@@ -30,6 +29,10 @@ class GameSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Colors referenced from your Home Screen for consistency
+    const Color primaryBlue = Color(0xFF1565C0); // Dark Blue
+    const Color accentBlue = Color(0xFF90CAF9);  // Medium Blue
+
     final List<Map<String, dynamic>> games = [
       {'name': 'League of Legends', 'icon': Icons.security, 'color': Colors.blue},
       {'name': 'Fortnite', 'icon': Icons.sports_esports, 'color': Colors.purpleAccent},
@@ -38,91 +41,131 @@ class GameSelectionScreen extends StatelessWidget {
     ];
 
     return Scaffold(
+      // Using a Container for the AppBar background to allow for gradients if desired later,
+      // but for now applying the solid primaryBlue to match the theme.
       appBar: AppBar(
-        title: const Text('Game Selection'),
-        backgroundColor: Colors.indigo.shade800,
+        title: const Text(
+          'Game Selection',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: primaryBlue,
         foregroundColor: Colors.white,
+        elevation: 4,
+        centerTitle: true,
         
         // --- ADDED NAVIGATION BUTTONS ---
-        // By setting automaticallyImplyLeading to false, we remove the default back arrow.
         automaticallyImplyLeading: false, 
+        toolbarHeight: 70, // Slightly taller app bar for bigger buttons
         actions: [
           // 1. Profile Button
-          IconButton(
-            icon: const Icon(Icons.person_outline),
-            onPressed: () => _navigateToProfile(context),
-            tooltip: 'Profile',
-            iconSize: 30.0, // Made the icon bigger
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1), // Subtle background for hit area
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.person_outline),
+              onPressed: () => _navigateToProfile(context),
+              tooltip: 'Profile',
+              iconSize: 32.0, // Big icon for easy tapping
+              padding: const EdgeInsets.all(8.0),
+            ),
           ),
           
-          // Added spacing between buttons
-          const SizedBox(width: 15.0), 
+          const SizedBox(width: 12.0), 
 
           // 2. Logout Button
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () => _logout(context),
-            tooltip: 'Logout',
-            iconSize: 30.0, // Made the icon bigger
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.redAccent.withOpacity(0.1), // Subtle red tint for logout
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () => _logout(context),
+              tooltip: 'Logout',
+              iconSize: 32.0, // Big icon for easy tapping
+              color: Colors.redAccent.shade100, // Distinct color for logout
+              padding: const EdgeInsets.all(8.0),
+            ),
           ),
-          // Added a small margin for the edge of the screen
-          const SizedBox(width: 8.0), 
+          
+          const SizedBox(width: 16.0), 
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0), 
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(bottom: 10.0, top: 25.0), 
-              child: Text(
-                'Choose Your Adventure!',
-                style: TextStyle(
-                  fontSize: 28, 
-                  fontWeight: FontWeight.w900, 
-                  color: Colors.white,
-                  letterSpacing: 0.5, 
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            
-            const Divider(
-              color: Colors.white30,
-              height: 20,
-              thickness: 1,
-              indent: 40,
-              endIndent: 40,
-            ),
-            
-            const SizedBox(height: 10), 
-            
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0), 
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, 
-                    crossAxisSpacing: 18.0, 
-                    mainAxisSpacing: 18.0, 
-                    childAspectRatio: 0.95, 
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          // Responsive layout logic
+          // Use 2 columns for phones (width < 600), 3 for wider screens
+          int crossAxisCount = constraints.maxWidth < 600 ? 2 : 3;
+          double paddingValue = constraints.maxWidth * 0.05; // 5% padding on sides
+
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: paddingValue), 
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0, top: 25.0), 
+                  child: Text(
+                    'Find Your Teammates!',
+                    style: const TextStyle(
+                      fontSize: 28, 
+                      fontWeight: FontWeight.w900, 
+                      fontStyle: FontStyle.italic, // Added italic for flair
+                      color: Colors.white,
+                      letterSpacing: 1.2, // Increased spacing for a header look
+                      shadows: [
+                        Shadow(
+                          offset: Offset(2, 2),
+                          blurRadius: 4.0,
+                          color: Colors.black45,
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  itemCount: games.length,
-                  itemBuilder: (context, index) {
-                    final game = games[index];
-                    return GameSelectionWidget(
-                      name: game['name'] as String,
-                      icon: game['icon'] as IconData,
-                      color: game['color'] as Color,
-                      onTap: () => _navigateToGameServer(context, game['name'] as String),
-                    );
-                  },
                 ),
-              ),
+                
+                Divider(
+                  color: accentBlue.withOpacity(0.5), // Using the Medium Blue accent
+                  height: 30,
+                  thickness: 2,
+                  indent: 60,
+                  endIndent: 60,
+                ),
+                
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10.0, bottom: 20.0), 
+                    child: GridView.builder(
+                      physics: const BouncingScrollPhysics(), // Better feel on phone
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount, 
+                        crossAxisSpacing: 20.0, 
+                        mainAxisSpacing: 20.0, 
+                        // Adjust ratio slightly to ensure cards are substantial
+                        childAspectRatio: 0.9, 
+                      ),
+                      itemCount: games.length,
+                      itemBuilder: (context, index) {
+                        final game = games[index];
+                        return GameSelectionWidget(
+                          name: game['name'] as String,
+                          icon: game['icon'] as IconData,
+                          color: game['color'] as Color,
+                          onTap: () => _navigateToGameServer(context, game['name'] as String),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
