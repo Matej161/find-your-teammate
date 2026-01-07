@@ -252,7 +252,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ],
               ),
               child: ElevatedButton(
-<<<<<<< Updated upstream
                 onPressed: _handleLogin,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent, 

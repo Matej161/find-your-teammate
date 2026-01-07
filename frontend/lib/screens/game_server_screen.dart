@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/Message.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/navbar_widget.dart';
 import '../models/squad.dart';
@@ -19,22 +20,26 @@ class _GameServerScreenState extends State<GameServerScreen> with TickerProvider
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _chatController = TextEditingController();
   
-  final List<Map<String, String>> _messages = [
-    {'user': 'Admin', 'text': 'Welcome to the global lobby!'},
-  ];
+  final SignalRContracts _signalRContracts = SignalRContracts();
+  final Map<String, String> gamesId = {
+    "League of Legends": "00000000-0000-0000-0000-000000000001",
+    "Fortnite": "00000000-0000-0000-0000-000000000002",
+    "Minecraft": "00000000-0000-0000-0000-000000000003",
+    "Rocket League": "00000000-0000-0000-0000-000000000004",
+    "Valorant": "00000000-0000-0000-0000-000000000005",
+    "Counter-Strike 2": "00000000-0000-0000-0000-000000000006",
+    "Overwatch 2": "00000000-0000-0000-0000-000000000007",
+    "Apex Legends": "00000000-0000-0000-0000-000000000008",
+  };
+  List<Message> messages = List.empty();
+  String channelId = "";
+
 
   // 2. UPDATED: Send logic now triggers the scroll
-  void _sendMessage() {
+  void _sendMessage() async {
     if (_chatController.text.isNotEmpty) {
-      setState(() {
-        _messages.add({
-          'user': 'You', 
-          'text': _chatController.text,
-        });
-        _chatController.clear();
-      });
-
-      SignalRContracts().sendMessage(widget.gameName, _chatController.text);
+      await _signalRContracts.sendMessage(channelId, _chatController.text, "7e422e7e-2032-49d1-bace-19cfc68bb08e");
+      loadMessages();
 
       // Auto-scroll to bottom after the message is rendered
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -49,6 +54,20 @@ class _GameServerScreenState extends State<GameServerScreen> with TickerProvider
     }
   }
 
+  void loadMessages() async {
+    try {
+      // 1. Zavoláš funkci s await
+      final history = await _signalRContracts.getChatHistory(channelId);
+
+      // 2. Aktualizuješ stav aplikace, aby se zprávy vykreslily
+      setState(() {
+        messages = history;
+      });
+    } catch (e) {
+      print("Chyba při přiřazování zpráv: $e");
+    }
+  }
+
   final List<Squad> mockSquads = [
     Squad(id: '1', title: 'Global Elite Push', rank: 'Supreme', currentPlayers: 3, maxPlayers: 5, description: 'Need 2 more, must have mic!'),
     Squad(id: '2', title: 'Chill Ranked', rank: 'Gold', currentPlayers: 1, maxPlayers: 5, description: 'No toxicity please.'),
@@ -59,6 +78,13 @@ class _GameServerScreenState extends State<GameServerScreen> with TickerProvider
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    init();
+  }
+
+  void init() async {
+    channelId = gamesId[widget.gameName] ?? "";
+    await _signalRContracts.connect();
+    loadMessages();
   }
 
   @override
@@ -123,15 +149,16 @@ class _GameServerScreenState extends State<GameServerScreen> with TickerProvider
     return Column(
       children: [
         Expanded(
-          child: _messages.isEmpty 
+          child: messages.isEmpty 
           ? Center(child: Text("Be the first to send a message!", style: GoogleFonts.quicksand(color: brandNavy)))
           : ListView.builder(
               controller: _scrollController, // Link the controller here
               // 4. FIXED: Bottom padding in list prevents last message from being hidden by button
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 80), 
-              itemCount: _messages.length,
+              itemCount: messages.length,
               itemBuilder: (context, index) {
-                bool isMe = _messages[index]['user'] == 'You';
+                //bool isMe = messages[index]['user'] == 'You';
+                bool isMe = true;
                 return Align(
                   alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
@@ -150,11 +177,11 @@ class _GameServerScreenState extends State<GameServerScreen> with TickerProvider
                       children: [
                         if (!isMe)
                           Text(
-                            _messages[index]['user']!,
+                            messages[index].userId!,
                             style: GoogleFonts.quicksand(fontSize: 10, fontWeight: FontWeight.bold, color: brandNavy),
                           ),
                         Text(
-                          _messages[index]['text']!,
+                          messages[index].content,
                           style: GoogleFonts.quicksand(color: isMe ? Colors.white : brandNavy, fontWeight: FontWeight.w500),
                         ),
                       ],

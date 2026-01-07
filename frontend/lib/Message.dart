@@ -15,11 +15,11 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      id: json['Id'],
-      roomId: json['RoomId'],
-      content: json['Content'],
-      timeSent: DateTime.parse(json['TimeSent']),
-      userId: json['UserId'],
+      id: json['id'],
+      roomId: json['roomId'],
+      content: json['content'],
+      timeSent: DateTime.parse(json['timestamp']),
+      userId: json['senderId'],
     );
   }
 }

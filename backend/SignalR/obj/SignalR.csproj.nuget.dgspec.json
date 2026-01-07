@@ -1,35 +1,33 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\SignalR\\SignalR.csproj": {}
+    "C:\\Users\\stepa\\Desktop\\test\\backend\\SignalR\\SignalR.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\Backend\\Backend.csproj": {
+    "C:\\Users\\stepa\\Desktop\\test\\backend\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\Backend\\Backend.csproj",
+        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\test\\backend\\Backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\Backend\\Backend.csproj",
-        "packagesPath": "C:\\Users\\User1\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\Backend\\obj\\",
+        "projectPath": "C:\\Users\\stepa\\Desktop\\test\\backend\\Backend\\Backend.csproj",
+        "packagesPath": "C:\\Users\\stepa\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\stepa\\Desktop\\test\\backend\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\User1\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\stepa\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
-                "projectPath": "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
+              "C:\\Users\\stepa\\Desktop\\test\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+                "projectPath": "C:\\Users\\stepa\\Desktop\\test\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
               }
             }
           }
@@ -83,28 +81,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\User1\\.dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\stepa\\.dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+    "C:\\Users\\stepa\\Desktop\\test\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
+        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\test\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
         "projectName": "DatabaseRepository",
-        "projectPath": "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
-        "packagesPath": "C:\\Users\\User1\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\DatabaseRepository\\obj\\",
+        "projectPath": "C:\\Users\\stepa\\Desktop\\test\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
+        "packagesPath": "C:\\Users\\stepa\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\stepa\\Desktop\\test\\backend\\DatabaseRepository\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\User1\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\stepa\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -164,36 +160,34 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\User1\\.dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\stepa\\.dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\SignalR\\SignalR.csproj": {
+    "C:\\Users\\stepa\\Desktop\\test\\backend\\SignalR\\SignalR.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
+        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\test\\backend\\SignalR\\SignalR.csproj",
         "projectName": "SignalR",
-        "projectPath": "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
-        "packagesPath": "C:\\Users\\User1\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\SignalR\\obj\\",
+        "projectPath": "C:\\Users\\stepa\\Desktop\\test\\backend\\SignalR\\SignalR.csproj",
+        "packagesPath": "C:\\Users\\stepa\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\stepa\\Desktop\\test\\backend\\SignalR\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\User1\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\stepa\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\Backend\\Backend.csproj": {
-                "projectPath": "C:\\Users\\User1\\OneDrive\\Plocha\\find-your-teammate\\backend\\Backend\\Backend.csproj"
+              "C:\\Users\\stepa\\Desktop\\test\\backend\\Backend\\Backend.csproj": {
+                "projectPath": "C:\\Users\\stepa\\Desktop\\test\\backend\\Backend\\Backend.csproj"
               }
             }
           }
@@ -249,7 +243,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\User1\\.dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\stepa\\.dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

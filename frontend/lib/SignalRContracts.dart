@@ -11,7 +11,7 @@ class SignalRContracts {
 
   Future<void> connect() async {
     _connection = HubConnectionBuilder()
-        .withUrl('https://YOUR_API_URL/chatHub')
+        .withUrl('http://10.0.2.2:5097/chatHub')
         .build();
 
     _registerHandlers();
@@ -47,11 +47,32 @@ class SignalRContracts {
     await _connection.invoke('LeaveRoom', args: [roomName]);
   }
 
-  Future<void> sendMessage(String roomName, String content) async {
+  Future<void> sendMessage(String roomId, String content, String userId) async {
     await _connection.invoke(
       'SendChatMessage',
-      args: [roomName, content],
+      args: [roomId, content, userId],
     );
+  }
+
+  Future<List<Message>> getChatHistory(String roomId) async {
+    try {
+      // I když server není async, Flutter na odpověď počkat musí
+      final result = await _connection.invoke(
+        'GetChatHistory', // Název tvé metody na serveru
+        args: [roomId],
+      );
+
+      if (result == null) return [];
+
+      // Přetypování z Object? na List a pak na tvoje Message objekty
+      return (result as List)
+          .map((m) => Message.fromJson(Map<String, dynamic>.from(m as Map)))
+          .toList();
+          
+    } catch (e) {
+      print("Chyba při načítání historie: $e");
+      return [];
+    }
   }
 
   Future<void> dispose() async {
