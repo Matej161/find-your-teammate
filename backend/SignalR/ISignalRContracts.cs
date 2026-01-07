@@ -1,4 +1,6 @@
-﻿namespace SignalR.Contracts;
+﻿using Backend;
+
+namespace SignalR.Contracts;
 
 public interface IChatClient
 {
@@ -15,4 +17,5 @@ public interface IChatServer
     Task SendChatMessage(string roomId, string content, Guid userId);
     Task SendEditMessage(Guid messageId, string newContent);
     Task SendDeleteMessage(Guid messageId);
+    List<ChatMessage> GetChatHistory(string roomId); 
 }

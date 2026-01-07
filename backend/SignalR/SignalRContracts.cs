@@ -51,6 +51,19 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
             .Group(GetRoomNameForMessage(messageId))
             .ReceiveEditMessage(messageId, newContent);
     }
+    
+    public List<ChatMessage> GetChatHistory(string roomId)
+    {
+        if (Guid.TryParse(roomId, out Guid roomGuid))
+        {
+            var messages = _backend.Chat.GetRoomHistory(roomGuid);
+        
+            return messages ?? new List<ChatMessage>();
+        }
+
+        // Pokud roomId není validní Guid, vrátíme prázdný list
+        return new List<ChatMessage>();
+    }
 
     public async Task SendDeleteMessage(Guid messageId)
     {
