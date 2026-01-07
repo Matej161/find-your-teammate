@@ -1,7 +1,7 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\FindTeammate.csproj": {}
+    "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\FindTeammate.csproj": {}
   },
   "projects": {
     "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\BackendRepository\\BackendRepository.csproj": {
@@ -29,8 +29,8 @@
               "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj": {
                 "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj"
               },
-              "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
-                "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
+              "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+                "projectPath": "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
               }
             }
           }
@@ -92,8 +92,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
-                "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
+              "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+                "projectPath": "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
               }
             }
           }
@@ -133,14 +133,14 @@
         }
       }
     },
-    "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+    "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
+        "projectUniqueName": "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
         "projectName": "DatabaseRepository",
-        "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
+        "projectPath": "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
         "packagesPath": "C:\\Users\\janfu\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\obj\\",
+        "outputPath": "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\janfu\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -198,14 +198,14 @@
         }
       }
     },
-    "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\FindTeammate.csproj": {
+    "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\FindTeammate.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\FindTeammate.csproj",
+        "projectUniqueName": "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\FindTeammate.csproj",
         "projectName": "FindTeammate",
-        "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\FindTeammate.csproj",
+        "projectPath": "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\FindTeammate.csproj",
         "packagesPath": "C:\\Users\\janfu\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\obj\\",
+        "outputPath": "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\FindTeammate\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\janfu\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -226,8 +226,8 @@
               "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj": {
                 "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj"
               },
-              "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
-                "projectPath": "C:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
+              "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+                "projectPath": "c:\\Users\\janfu\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
               }
             }
           }

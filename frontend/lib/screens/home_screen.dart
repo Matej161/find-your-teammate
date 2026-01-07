@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import 'package:frontend/widgets/login_button_widget.dart'; // Assuming this import path is correct
-=======
-import 'package:frontend/widgets/login_button_widget.dart'; // Assuming this import path is correct
->>>>>>> b5bf01446a2dd0dd11a0e6b1096506750b9e72b9
+import 'package:frontend/widgets/login_button_widget.dart';
+import 'package:frontend/services/auth_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   // --- HELPER WIDGET FOR THE FEATURE LIST ---
   // This creates the Icon + Text rows
   Widget _buildFeatureItem({
@@ -55,12 +57,6 @@ class HomeScreen extends StatefulWidget {
       ],
     );
   }
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   final _authService = AuthService();
   String? _userName;
   bool _isLoading = true;

@@ -55,11 +55,11 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF111827), // Deep dark background
         useMaterial3: true,
       ),
+<<<<<<< Updated upstream
 
       // Currently set to Game Selection for testing. 
       // Change this to '/login' or '/home' when you want to start normally.
-      initialRoute: '/home', 
-      
+      initialRoute: '/home',
       routes: {
         // Restored routes so login/register works
         '/home': (context) => const HomeScreen(),

@@ -1,4 +1,4 @@
-using Database;
+using static Database;
 using Backend;
 using FindTeammate.Services;
 using FindTeammate.Database;

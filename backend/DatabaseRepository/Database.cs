@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Microsoft.Data.Sqlite;
 
 public static class Database
@@ -9,7 +12,6 @@ public static class Database
 
     public static void CreateTable<T>() where T : class
     {
-<<<<<<< HEAD
         string tableName = GetTableName<T>();
         var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
         var columnDefinitions = new List<string>();
@@ -40,147 +42,17 @@ public static class Database
             command.CommandText = createSql;
             command.ExecuteNonQuery();
         }
-=======
-        string tableName = GetTableName<T>();
-        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-        var columnDefinitions = new List<string>();
-
-        foreach (var prop in properties)
-        {
-            if (prop.Name.Equals("Id", StringComparison.OrdinalIgnoreCase))
-            {
-                columnDefinitions.Add("Id TEXT PRIMARY KEY NOT NULL");
-            }
-            else
-            {
-                string sqlDataType = GetSqliteType(prop.PropertyType);
-                if (!string.IsNullOrEmpty(sqlDataType))
-                {
-                    columnDefinitions.Add($"{prop.Name} {sqlDataType}");
-                }
->>>>>>> b5bf01446a2dd0dd11a0e6b1096506750b9e72b9
-            }
-        }
-        
-        string columnsSql = string.Join(", ", columnDefinitions);
-        string createSql = $"CREATE TABLE IF NOT EXISTS {tableName} ({columnsSql});";
-
-        using (var connection = new SqliteConnection(DatabasePath))
-        {
-            connection.Open();
-            var command = connection.CreateCommand();
-            command.CommandText = createSql;
-            command.ExecuteNonQuery();
-        }
-<<<<<<< HEAD
-        catch (Exception e)
-        {
-            PrintError("Got exception: " + e.Message);
-            throw;
-        }
-        PrintInfo(command.CommandText);
-        command.ExecuteNonQuery();
-        _sqliteConnection.Close(); 
-    }
-
-    public static void CreateTableIfNotExists(List<string> blueprint, string name)
-    {
-        if(!CheckForDatabaseConnected()) throw new DatabaseConnectedException();
-        _sqliteConnection.Open();
-        using var command = _sqliteConnection.CreateCommand();
-        
-        // Check if table exists
-        command.CommandText = $"SELECT name FROM sqlite_master WHERE type='table' AND name='{name}';";
-        var tableExists = command.ExecuteScalar() != null;
-        
-        if (tableExists)
-        {
-            // Drop existing table to recreate with correct structure
-            command.CommandText = $"DROP TABLE IF EXISTS {name};";
-            command.ExecuteNonQuery();
-        }
-        
-        // Create table with correct structure
-        command.CommandText = $"CREATE TABLE IF NOT EXISTS {name}(Id TEXT PRIMARY KEY, ";
-        for (int i = 0; i < blueprint.Count; i++)
-        {
-            if(i != 0) command.CommandText += ",";
-            command.CommandText += blueprint[i] + " TEXT";
-        }
-
-        command.CommandText += ");";
-        
-        command.ExecuteNonQuery();
-        _sqliteConnection.Close();
-    }
-
-    public static void ChangeData(Data dataToSave, string name, Guid id)
-    {
-        if(!CheckForDatabaseConnected()) throw new DatabaseConnectedException();
-        _sqliteConnection.Open();
-        using var command = _sqliteConnection.CreateCommand();
-        command.CommandText = $"UPDATE {name} SET ";
-        try
-        {
-            int index = 0;
-            while (true)
-            {
-                if(index != 0) command.CommandText += ", ";
-                command.CommandText += dataToSave.GetNameByIndex(index) + " = '" + dataToSave.GetDataByString(dataToSave.GetNameByIndex(index)) + "'";
-            }
-        }
-        catch (Exception e)
-        {
-            
-        }
-        command.CommandText += $"WHERE Id = {id}";
-        command.ExecuteNonQuery();
-        _sqliteConnection.Close();
-=======
         Console.WriteLine($"Tabulka '{tableName}' byla úspěšně vytvořena.");
->>>>>>> b5bf01446a2dd0dd11a0e6b1096506750b9e72b9
     }
+
     
     public static void Insert<T>(T item) where T : class, new()
     {
-<<<<<<< HEAD
-        if(!CheckForDatabaseConnected()) throw new DatabaseConnectedException();
-        _sqliteConnection.Open();
-        using var command = _sqliteConnection.CreateCommand();
-        
-        // Build parameterized query for safety
-        List<string> values = new List<string> { "@id" };
-        List<string> dataValues = new List<string>();
-        int paramIndex = 1;
-        
-        string data = "";
-        while ((data = dataToSave.Next()) != null)
-        {
-            string paramName = $"@param{paramIndex}";
-            values.Add(paramName);
-            dataValues.Add(data);
-            paramIndex++;
-        }
-        
-        command.CommandText = $"INSERT INTO {name} VALUES ({string.Join(", ", values)});";
-        command.Parameters.AddWithValue("@id", id.ToString());
-        
-        for (int i = 0; i < dataValues.Count; i++)
-        {
-            command.Parameters.AddWithValue($"@param{i + 1}", dataValues[i]);
-        }
-        
-        PrintInfo(command.CommandText);
-        command.ExecuteNonQuery();
-        _sqliteConnection.Close(); 
-    }
-=======
         string tableName = GetTableName<T>();
         var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
         var insertColumns = new List<string>();
         var insertParams = new List<string>();
->>>>>>> b5bf01446a2dd0dd11a0e6b1096506750b9e72b9
 
         foreach (var prop in properties)
         {
@@ -384,57 +256,30 @@ public static class Database
         return null;
     }
 
-    public static Data? ReadDataByField(Data blueprint, string tableName, string fieldName, string fieldValue)
-    {
-        if(!CheckForDatabaseConnected()) throw new DatabaseConnectedException();
-        _sqliteConnection.Open();
-        using var command = _sqliteConnection.CreateCommand();
-        command.CommandText = $"SELECT * FROM {tableName} WHERE {fieldName} = @value LIMIT 1";
-        command.Parameters.AddWithValue("@value", fieldValue);
-        using var reader = command.ExecuteReader();
-        
-        Data result = blueprint.CopyFormat();
-        int index = 0;
-        if (reader.Read())
-        {
-            // Use the same pattern as ReadData - iterate through blueprint using Next()
-            // Create a temporary blueprint to iterate through
-            Data tempBlueprint = blueprint.CopyFormat();
-            while (tempBlueprint.Next() != null)
-            {
-                result.Add(reader.GetString(index + 1)); // +1 to skip Id column
-                index++;
-            }
-            result.ResetIndex();
-            _sqliteConnection.Close();
-            return result;
-        }
-        
-        result.ResetIndex();
-        _sqliteConnection.Close();
-        return null;
-    }
-
     public static Guid? GetIdByField(string tableName, string fieldName, string fieldValue)
     {
-        if(!CheckForDatabaseConnected()) throw new DatabaseConnectedException();
-        _sqliteConnection.Open();
-        using var command = _sqliteConnection.CreateCommand();
-        command.CommandText = $"SELECT Id FROM {tableName} WHERE {fieldName} = @value LIMIT 1";
-        command.Parameters.AddWithValue("@value", fieldValue);
-        using var reader = command.ExecuteReader();
+        string selectSql = $"SELECT Id FROM {tableName} WHERE {fieldName} = @value LIMIT 1";
         
-        if (reader.Read())
+        using (var connection = new SqliteConnection(DatabasePath))
         {
-            string idString = reader.GetString(0);
-            _sqliteConnection.Close();
-            if (Guid.TryParse(idString, out Guid userId))
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = selectSql;
+            command.Parameters.AddWithValue("@value", fieldValue);
+            
+            using (var reader = command.ExecuteReader())
             {
-                return userId;
+                if (reader.Read())
+                {
+                    string idString = reader.GetString(0);
+                    if (Guid.TryParse(idString, out Guid userId))
+                    {
+                        return userId;
+                    }
+                }
             }
         }
         
-        _sqliteConnection.Close();
         return null;
     }
 }
