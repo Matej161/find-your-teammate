@@ -65,6 +65,84 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
         return new List<ChatMessage>();
     }
 
+    public bool CreateAccount(string username, string email, string password)
+    {
+        if (GetUserByEmail(email) != null) return false;
+        _backend.UserRepo.Add(new User()
+        {
+            Id = Guid.NewGuid(),
+            Username = username,
+            Email = email,
+            PasswordHash = PasswordToHash(password)
+        });
+        return true;
+    }
+    
+    private User? GetUserByEmail(string email)
+    {
+        // Najde prvního uživatele, který odpovídá, nebo vrátí null
+        var user = _backend.UserRepo.GetAll().FirstOrDefault(u => u.Email == email);
+        return user;
+    }
+
+    public bool CanLogin(string email, string password)
+    {
+        User? user = GetUserByEmail(email);
+        if (user == null) return false;
+        if (user.PasswordHash.Equals(PasswordToHash(password))) return true;
+
+        return false;
+    }
+
+    private string PasswordToHash(string password)
+    {
+        string hashed = password;
+        for (int i = 0; i < 50; i++)
+        {
+            string curhashed = "";
+            foreach (char c in hashed)
+            {
+                string s = "";
+                if (c.Equals("a"))
+                {
+                    s = "ch";
+                }
+                if (c.Equals("A"))
+                {
+                    s = "CH";
+                }
+                else if (c.Equals("o"))
+                {
+                    s = "z";
+                }
+                else if (c.Equals("O"))
+                {
+                    s = "Z";
+                }
+                else if (c >= '0' && c <= '9')
+                {
+                    s = "b";
+                }
+                else if (!(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z'))
+                {
+                    s = "B";
+                }
+                else
+                {
+                    s += (char) (c + 1);
+                }
+                curhashed = s;
+            }
+            hashed = curhashed;
+        }
+        return hashed;
+    }
+
+    public string Login(string email)
+    {
+        return GetUserByEmail(email).Id.ToString();
+    }
+
     public async Task SendDeleteMessage(Guid messageId)
     {
         await Clients
