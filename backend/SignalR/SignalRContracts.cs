@@ -7,39 +7,42 @@ namespace SignalR;
 
 public class SignalRContracts : Hub<IChatClient>,IChatServer
 {
+
+    private Backend.Backend _backend;
     
-
-    public ChatRoom ChatRoom { get; set; }
-    public ChatMessage  Message { get; set; }
-    public Task JoinRoom(string roomName)
+    public SignalRContracts()
     {
-        Groups.Add(Context.ConnectionId, roomName);
+        _backend = new Backend.Backend();
+    }
+    
+    public Task JoinRoom(string roomId)
+    {
+        Groups.Add(Context.ConnectionId, roomId);
+        _backend.ChatRoomService.UserJoined(Guid.Parse(roomId));
         return Task.CompletedTask;
     }
 
-    public Task LeaveRoom(string roomName)
+    public Task LeaveRoom(string roomId)
     {
-        Groups.Remove(Context.ConnectionId, roomName);
+        Groups.Remove(Context.ConnectionId, roomId);
+        _backend.ChatRoomService.UserLeft(Guid.Parse(roomId));
         return Task.CompletedTask;
     }
 
 
-    public async Task SendChatMessage(string roomName, string content, Guid userId)
+    public async Task SendChatMessage(string roomId, string content, Guid userId)
     {
-        
-        //tady to potrebuji zmenit
-        
-        
-        
-        /*var message = new ChatMessage() {Id = Guid.NewGuid(),
+        var message = new ChatMessage() {Id = Guid.NewGuid(),
             SenderId = userId,
-            content,
-            DateTime.UtcNow,
-            userId};
+            RoomId = Guid.Parse(roomId),
+            Timestamp = DateTime.UtcNow,
+            Content = content};
 
+        _backend.Chat.SendMessage(userId, Guid.Parse(roomId), content);
+        
         await Clients
-            .Group(roomName)
-            .ReceiveChatMessage(message);*/
+            .Group(roomId)
+            .ReceiveChatMessage(message);
     }
 
     public async Task SendEditMessage(Guid messageId, string newContent)

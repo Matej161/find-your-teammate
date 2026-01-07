@@ -9,10 +9,10 @@ public interface IChatClient
 
 public interface IChatServer
 {
-    Task JoinRoom(string roomName);
-    Task LeaveRoom(string roomName);
+    Task JoinRoom(string roomId);
+    Task LeaveRoom(string roomId);
 
-    Task SendChatMessage(string roomName, string content, Guid userId);
+    Task SendChatMessage(string roomId, string content, Guid userId);
     Task SendEditMessage(Guid messageId, string newContent);
     Task SendDeleteMessage(Guid messageId);
 }
