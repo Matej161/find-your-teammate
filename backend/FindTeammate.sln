@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseRepository", "Datab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendRepository", "BackendRepository\BackendRepository.csproj", "{1971D970-B881-4673-BF36-73D37FA8666B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{CFF41535-EE70-42E0-B7F8-04A34CF71212}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{1971D970-B881-4673-BF36-73D37FA8666B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1971D970-B881-4673-BF36-73D37FA8666B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1971D970-B881-4673-BF36-73D37FA8666B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFF41535-EE70-42E0-B7F8-04A34CF71212}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFF41535-EE70-42E0-B7F8-04A34CF71212}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFF41535-EE70-42E0-B7F8-04A34CF71212}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFF41535-EE70-42E0-B7F8-04A34CF71212}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

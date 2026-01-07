@@ -3,7 +3,7 @@ import 'package:signalr_netcore/signalr_client.dart';
 import 'Message.dart'; // ⬅️ TOTO NESMÍ CHYBĚT
 
 
-class ChatSignalRService {
+class SignalRContracts {
   late HubConnection _connection;
 
   final _messageController = StreamController<Message>.broadcast();
