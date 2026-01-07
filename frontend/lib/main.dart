@@ -14,6 +14,7 @@ import 'firebase_options.dart';
 
 // Import the Game Selection Screen
 import 'screens/game_selection_screen.dart';
+import 'screens/profile_screen.dart';
 
 // --- 2. UPDATED MAIN FUNCTION ---
 // We add 'async' because connecting to Firebase takes a split second,
@@ -68,6 +69,7 @@ class MyApp extends StatelessWidget {
         
         // The new screen
         '/gameselection': (context) => const GameSelectionScreen(),
+        '/profile': (context) => const ProfileScreen(),
         
         // NOTE: '/gameserver' is NOT here because it is dynamic (handled in game_selection_screen.dart)
       },

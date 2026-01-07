@@ -4,11 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 class NavbarWidget extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final bool showBackButton;
+  final VoidCallback? onBackPressed; // Optional custom back button handler
 
   const NavbarWidget({
     super.key, 
     required this.title, 
-    this.showBackButton = true // Default to true so we can go back
+    this.showBackButton = true, // Default to true so we can go back
+    this.onBackPressed, // Optional custom back button handler
   });
 
   @override
@@ -92,61 +94,97 @@ class _NavbarWidgetState extends State<NavbarWidget> {
   @override
   Widget build(BuildContext context) {
     const Color brandNavy = Color(0xFF102060);
+    const Color brandBlue = Color(0xFF1E88E5);
     const Color iceBackground = Color(0xFFE8F1F9);
     const Color borderColor = Color(0xFFD0E0F0);
 
     return AppBar(
-      backgroundColor: iceBackground,
-      elevation: 0,
-      toolbarHeight: 50,
+      backgroundColor: Colors.white,
+      elevation: 2,
+      shadowColor: Colors.black.withOpacity(0.1),
+      toolbarHeight: 56,
       centerTitle: false,
-      automaticallyImplyLeading: false, 
-      // 1. ADDED BACK ARROW (Replaced search)
-      leading: widget.showBackButton ? IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new, color: brandNavy, size: 20),
-        onPressed: () => Navigator.of(context).pop(),
-      ) : null,
+      automaticallyImplyLeading: false,
       shape: const Border(
         bottom: BorderSide(color: borderColor, width: 1.0),
       ),
+      // 1. ENHANCED BACK ARROW with better styling
+      leading: widget.showBackButton ? Container(
+        margin: const EdgeInsets.all(8),
+        child: Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: widget.onBackPressed ?? () => Navigator.of(context).pop(),
+            child: const Icon(Icons.arrow_back_ios_new, color: brandNavy, size: 20),
+          ),
+        ),
+      ) : const SizedBox(width: 16),
       title: Text(
         widget.title,
         style: GoogleFonts.quicksand(
           color: brandNavy,
-          fontWeight: FontWeight.w900,
-          fontSize: 18,
-          letterSpacing: 1.2,
+          fontWeight: FontWeight.w800,
+          fontSize: 20,
+          letterSpacing: 0.5,
         ),
       ),
       actions: [
-        // 2. USER MENU (Replaced Exit Button)
-        PopupMenuButton<String>(
-          icon: const Icon(Icons.account_circle, color: brandNavy, size: 28),
-          color: Colors.white,
-          onSelected: (value) {
-            if (value == 'logout') {
-              // --- LOGOUT NOTIFICATION ---
-              _showTopToast('You logged out!', Colors.redAccent, Icons.logout);
-              
-              // Navigate to Home
-              Navigator.of(context).pushReplacementNamed('/home');
-            } else if (value == 'profile') {
-              print("Navigate to profile page in the future");
-            }
-          },
-          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-            PopupMenuItem<String>(
-              value: 'profile',
-              child: Text('My Profile', style: GoogleFonts.quicksand(fontWeight: FontWeight.w600)),
+        // 2. ENHANCED USER MENU with better icon styling
+        Container(
+          margin: const EdgeInsets.only(right: 8),
+          child: PopupMenuButton<String>(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-            const PopupMenuDivider(),
-            PopupMenuItem<String>(
-              value: 'logout',
-              child: Text('Logout', style: GoogleFonts.quicksand(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+            elevation: 8,
+            icon: Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: iceBackground,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: borderColor, width: 1),
+              ),
+              child: const Icon(Icons.account_circle, color: brandNavy, size: 24),
             ),
-          ],
+            color: Colors.white,
+            onSelected: (value) {
+              if (value == 'logout') {
+                // --- LOGOUT NOTIFICATION ---
+                _showTopToast('You logged out!', Colors.redAccent, Icons.logout);
+                
+                // Navigate to Home
+                Navigator.of(context).pushReplacementNamed('/home');
+              } else if (value == 'profile') {
+                Navigator.of(context).pushNamed('/profile');
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              PopupMenuItem<String>(
+                value: 'profile',
+                child: Row(
+                  children: [
+                    Icon(Icons.person, color: brandBlue, size: 20),
+                    const SizedBox(width: 12),
+                    Text('My Profile', style: GoogleFonts.quicksand(fontWeight: FontWeight.w600, color: brandNavy)),
+                  ],
+                ),
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem<String>(
+                value: 'logout',
+                child: Row(
+                  children: [
+                    const Icon(Icons.logout, color: Colors.redAccent, size: 20),
+                    const SizedBox(width: 12),
+                    Text('Logout', style: GoogleFonts.quicksand(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-        const SizedBox(width: 12),
       ],
     );
   }
