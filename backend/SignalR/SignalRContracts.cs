@@ -1,5 +1,5 @@
 ﻿using Backend;
-using Microsoft.AspNet.SignalR;
+using Microsoft.AspNetCore.SignalR;
 
 using SignalR.Contracts;
 
@@ -9,22 +9,22 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
 {
 
     private Backend.Backend _backend;
-    
+
     public SignalRContracts()
     {
         _backend = new Backend.Backend();
     }
-    
+
     public Task JoinRoom(string roomId)
     {
-        Groups.Add(Context.ConnectionId, roomId);
+        Groups.AddToGroupAsync(Context.ConnectionId, roomId);
         _backend.ChatRoomService.UserJoined(Guid.Parse(roomId));
         return Task.CompletedTask;
     }
 
     public Task LeaveRoom(string roomId)
     {
-        Groups.Remove(Context.ConnectionId, roomId);
+        Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
         _backend.ChatRoomService.UserLeft(Guid.Parse(roomId));
         return Task.CompletedTask;
     }
@@ -39,7 +39,7 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
             Content = content};
 
         _backend.Chat.SendMessage(userId, Guid.Parse(roomId), content);
-        
+
         await Clients
             .Group(roomId)
             .ReceiveChatMessage(message);
