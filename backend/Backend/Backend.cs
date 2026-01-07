@@ -3,6 +3,11 @@
 public class Backend
 {
     
+    public SqliteRepository<User> UserRepo = null;
+    public SqliteRepository<ChatRoom> RoomRepo = null;
+    public ChatRoomService ChatRoomService = null;
+    public ChatManager Chat = null;
+    
     public static void Main(string[] args)
     {
         new Backend();
@@ -10,24 +15,21 @@ public class Backend
 
     public Backend()
     {
-        var chat = new ChatManager();
-        chat.CreateInitialTables();
-        var userRepo = new SqliteRepository<User>();
-        var roomRepo = new SqliteRepository<ChatRoom>();
+        Chat = new ChatManager();
+        Chat.CreateInitialTables();
+        UserRepo = new SqliteRepository<User>();
+        RoomRepo = new SqliteRepository<ChatRoom>();
 
-        var chatRoomService = new ChatRoomService(roomRepo);
+        ChatRoomService = new ChatRoomService(RoomRepo);
         
-        var pepa = userRepo.Add(new User { Username = "Pepa"});
-        var mistnost = chatRoomService.CreateChatRoom("Mistnost", pepa.Id);
-
-        chat.SendMessage(pepa.Id, mistnost.Id, "Ahoj všichni!");
-
-        var history = chat.GetRoomHistory(mistnost.Id);
-        foreach (var m in history)
+        var existingRooms = RoomRepo.GetAll();
+        foreach (var room in GlobalChatIds.DefaultRooms)
         {
-            Console.WriteLine($"[{m.Timestamp}] {m.Content}");
+            if (!existingRooms.Any(r => r.Id == room.Id))
+            {
+                RoomRepo.Add(room);
+                Console.WriteLine($"Vytvořen globální chat: {room.Name}");
+            }
         }
-        
-        chatRoomService.UserLeft(mistnost.Id);
     }
 }
