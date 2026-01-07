@@ -23,11 +23,18 @@ void main() async {
   // We MUST call this if we are doing anything asynchronous (like `await`) in main().
   WidgetsFlutterBinding.ensureInitialized();
 
-  // This connects your specific app to the Firebase project using the
-  // configuration found in firebase_options.dart
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    // This connects your specific app to the Firebase project using the
+    // configuration found in firebase_options.dart
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    print('Firebase initialized successfully');
+  } catch (e) {
+    print('Error initializing Firebase: $e');
+    // Re-throw to prevent app from running without Firebase
+    rethrow;
+  }
 
   runApp(const MyApp());
 }
@@ -55,7 +62,6 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF111827), // Deep dark background
         useMaterial3: true,
       ),
-<<<<<<< Updated upstream
 
       // Currently set to Game Selection for testing. 
       // Change this to '/login' or '/home' when you want to start normally.

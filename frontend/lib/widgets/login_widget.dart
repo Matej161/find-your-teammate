@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart'; 
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
@@ -91,8 +92,19 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
 
     try {
+      // Check if Firebase is initialized
+      if (Firebase.apps.isEmpty) {
+        if (mounted) Navigator.pop(context);
+        _showTopToast('Firebase not initialized. Please restart the app.', Colors.redAccent, Icons.error_outline);
+        return;
+      }
+
+      // Get the default Firebase app and auth instance
+      final FirebaseApp app = Firebase.app();
+      final FirebaseAuth auth = FirebaseAuth.instanceFor(app: app);
+
       // B. Talk to Firebase Backend
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await auth.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
@@ -252,7 +264,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ],
               ),
               child: ElevatedButton(
-<<<<<<< Updated upstream
                 onPressed: _handleLogin,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent, 

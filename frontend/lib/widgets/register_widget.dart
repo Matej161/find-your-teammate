@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class RegisterWidget extends StatefulWidget {
   const RegisterWidget({super.key});
@@ -85,13 +86,41 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   // --- REGISTER LOGIC ---
   Future<void> _handleRegister() async {
     // 0. Basic Validation
-    if (_passwordController.text.trim() != _confirmPasswordController.text.trim()) {
-      _showTopToast('Passwords do not match', Colors.redAccent, Icons.error_outline);
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final confirmPassword = _confirmPasswordController.text.trim();
+    final username = _usernameController.text.trim();
+
+    if (username.isEmpty) {
+      _showTopToast('Please enter a username', Colors.orangeAccent, Icons.warning_amber_rounded);
       return;
     }
 
-    if (_usernameController.text.trim().isEmpty) {
-      _showTopToast('Please enter a username', Colors.orangeAccent, Icons.warning_amber_rounded);
+    if (email.isEmpty) {
+      _showTopToast('Please enter an email address', Colors.orangeAccent, Icons.warning_amber_rounded);
+      return;
+    }
+
+    // Email format validation
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (!emailRegex.hasMatch(email)) {
+      _showTopToast('Please enter a valid email address', Colors.orangeAccent, Icons.warning_amber_rounded);
+      return;
+    }
+
+    if (password.isEmpty) {
+      _showTopToast('Please enter a password', Colors.orangeAccent, Icons.warning_amber_rounded);
+      return;
+    }
+
+    // Firebase requires password to be at least 6 characters
+    if (password.length < 6) {
+      _showTopToast('Password must be at least 6 characters', Colors.orangeAccent, Icons.warning_amber_rounded);
+      return;
+    }
+
+    if (password != confirmPassword) {
+      _showTopToast('Passwords do not match', Colors.redAccent, Icons.error_outline);
       return;
     }
 
@@ -103,15 +132,31 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     );
 
     try {
+      // Check if Firebase is initialized
+      if (Firebase.apps.isEmpty) {
+        if (mounted) Navigator.pop(context);
+        _showTopToast('Firebase not initialized. Please restart the app.', Colors.redAccent, Icons.error_outline);
+        return;
+      }
+
+      // Get the default Firebase app and auth instance
+      final FirebaseApp app = Firebase.app();
+      final FirebaseAuth auth = FirebaseAuth.instanceFor(app: app);
+
       // B. Create User in Firebase
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
       );
 
       // Optional: Save Username
       if (userCredential.user != null) {
-        await userCredential.user!.updateDisplayName(_usernameController.text.trim());
+        try {
+          await userCredential.user!.updateDisplayName(username);
+        } catch (e) {
+          print('Error updating display name: $e');
+          // Continue even if display name update fails
+        }
       }
 
       // C. Close loading circle
@@ -129,18 +174,43 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       // C. Close loading circle
       if (mounted) Navigator.pop(context);
 
+      // Log the full error for debugging
+      print('Firebase Auth Error Code: ${e.code}');
+      print('Firebase Auth Error Message: ${e.message}');
+      print('Firebase Auth Error Details: ${e.toString()}');
+
       // D. FAILURE NOTIFICATION (Top Toast)
       String message = 'An error occurred';
       if (e.code == 'weak-password') {
-        message = 'Password is too weak.';
+        message = 'Password is too weak. Use at least 6 characters.';
       } else if (e.code == 'email-already-in-use') {
         message = 'Email already in use.';
       } else if (e.code == 'invalid-email') {
         message = 'Invalid email address.';
+      } else if (e.code == 'operation-not-allowed') {
+        message = 'Email/password accounts are not enabled. Please enable it in Firebase Console.';
+      } else if (e.code == 'invalid-api-key') {
+        message = 'Invalid API key. Please check Firebase configuration.';
+      } else if (e.code == 'network-request-failed') {
+        message = 'Network error. Please check your internet connection.';
+      } else {
+        message = 'Registration failed: ${e.message ?? e.code}';
       }
 
       if (mounted) {
         _showTopToast(message, Colors.redAccent, Icons.cancel_outlined);
+      }
+    } catch (e, stackTrace) {
+      // C. Close loading circle
+      if (mounted) Navigator.pop(context);
+
+      // Log the full error for debugging
+      print('General Error: $e');
+      print('Stack Trace: $stackTrace');
+
+      // Handle any other errors (network, etc.)
+      if (mounted) {
+        _showTopToast('Registration failed: ${e.toString()}. Please check your connection and try again.', Colors.redAccent, Icons.cancel_outlined);
       }
     }
   }
@@ -303,9 +373,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Already have an account? ",
-                  style: TextStyle(fontSize: screenWidth * 0.035, color: Colors.black54),
+                Flexible(
+                  child: Text(
+                    "Already have an account? ",
+                    style: TextStyle(fontSize: screenWidth * 0.035, color: Colors.black54),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
