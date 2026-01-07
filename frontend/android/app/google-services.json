@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "3663967250",
+    "project_id": "find-your-teammate-fe8ec",
+    "storage_bucket": "find-your-teammate-fe8ec.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3663967250:android:ff984d7d55e2b2771714cb",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmuCdZM3GLM--8SM-dG6XLRKqJfWpb9I4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
