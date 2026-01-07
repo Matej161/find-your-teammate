@@ -20,6 +20,14 @@ public class Backend
         UserRepo = new SqliteRepository<User>();
         RoomRepo = new SqliteRepository<ChatRoom>();
 
+        /*UserRepo.Add(new User()
+        {
+            Id = Guid.NewGuid(),
+            Username = "Test",
+            Email = "fuka@petkovy.cz",
+            PasswordHash = "135freerobux124"
+        });*/
+
         ChatRoomService = new ChatRoomService(RoomRepo);
         
         var existingRooms = RoomRepo.GetAll();

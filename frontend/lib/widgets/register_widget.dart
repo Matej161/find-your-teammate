@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../SignalRContracts.dart';
 
 class RegisterWidget extends StatefulWidget {
   const RegisterWidget({super.key});
@@ -23,13 +24,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
   // --- CUSTOM TOP NOTIFICATION HELPER ---
   void _showTopToast(String message, Color bgColor, IconData icon) {
-    // 1. Remove existing toast if visible
     _currentToast?.remove();
 
-    // 2. Create the OverlayEntry
     _currentToast = OverlayEntry(
       builder: (context) => Positioned(
-        top: MediaQuery.of(context).padding.top + 10, // Safe area + 10px margin
+        top: MediaQuery.of(context).padding.top + 10,
         left: 20,
         right: 20,
         child: Material(
@@ -38,7 +37,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             decoration: BoxDecoration(
               color: bgColor,
-              borderRadius: BorderRadius.circular(30), // Rounded "Pill" shape
+              borderRadius: BorderRadius.circular(30),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.2),
@@ -50,16 +49,16 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, color: Colors.white, size: 28), // Big Icon
+                Icon(icon, color: Colors.white, size: 28),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     message,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 16, // Bigger Font
-                      fontWeight: FontWeight.bold, // Bold Font
-                      fontFamily: 'Roboto', // Default nicely readable font
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
                     ),
                   ),
                 ),
@@ -70,10 +69,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       ),
     );
 
-    // 3. Insert into the screen
     Overlay.of(context).insert(_currentToast!);
 
-    // 4. Auto-remove after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
       if (_currentToast != null) {
         _currentToast?.remove();
@@ -84,67 +81,31 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
   // --- REGISTER LOGIC ---
   Future<void> _handleRegister() async {
-    // 0. Basic Validation
-    if (_passwordController.text.trim() != _confirmPasswordController.text.trim()) {
-      _showTopToast('Passwords do not match', Colors.redAccent, Icons.error_outline);
-      return;
-    }
+    SignalRContracts signalRContracts = SignalRContracts();
+    await signalRContracts.connect();
 
-    if (_usernameController.text.trim().isEmpty) {
-      _showTopToast('Please enter a username', Colors.orangeAccent, Icons.warning_amber_rounded);
-      return;
-    }
+    if (_passwordController.text == _confirmPasswordController.text) {
+      if (_passwordController.text.isNotEmpty) {
+        bool canCreate = await signalRContracts.createAccount(
+          _usernameController.text, 
+          _emailController.text, 
+          _passwordController.text
+        );
 
-    // A. Show loading circle
-    showDialog(
-      context: context,
-      barrierDismissible: false, 
-      builder: (context) => const Center(child: CircularProgressIndicator()),
-    );
+        if (!mounted) return;
 
-    try {
-      // B. Create User in Firebase
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-
-      // Optional: Save Username
-      if (userCredential.user != null) {
-        await userCredential.user!.updateDisplayName(_usernameController.text.trim());
+        if (canCreate) {
+          Navigator.of(context).pushReplacementNamed('/gameselection');
+        } else {
+          _showTopToast("Account creation failed", Colors.redAccent, Icons.error_outline);
+        }
+      } else {
+        _showTopToast("Password cannot be empty", Colors.orangeAccent, Icons.warning_amber_rounded);
       }
-
-      // C. Close loading circle
-      if (mounted) Navigator.pop(context);
-
-      if (mounted) {
-        // D. SUCCESS NOTIFICATION (Top Toast)
-        _showTopToast('Account Created! Welcome.', Colors.green.shade600, Icons.check_circle_outline);
-        
-        // E. Navigate
-        Navigator.of(context).pushReplacementNamed('/gameselection');
-      }
-
-    } on FirebaseAuthException catch (e) {
-      // C. Close loading circle
-      if (mounted) Navigator.pop(context);
-
-      // D. FAILURE NOTIFICATION (Top Toast)
-      String message = 'An error occurred';
-      if (e.code == 'weak-password') {
-        message = 'Password is too weak.';
-      } else if (e.code == 'email-already-in-use') {
-        message = 'Email already in use.';
-      } else if (e.code == 'invalid-email') {
-        message = 'Invalid email address.';
-      }
-
-      if (mounted) {
-        _showTopToast(message, Colors.redAccent, Icons.cancel_outlined);
-      }
+    } else {
+      _showTopToast("Passwords do not match", Colors.redAccent, Icons.cancel_outlined);
     }
   }
-  // ------------------------
 
   @override
   void dispose() {
@@ -152,7 +113,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-    // Remove toast if screen is closed to prevent errors
     _currentToast?.remove(); 
     super.dispose();
   }
@@ -162,11 +122,22 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    final responsiveWidth = screenWidth * 0.9 > 380 ? 380.0 : screenWidth * 0.9;
+    // Optimized sizing for mobile readability
+    final responsiveWidth = screenWidth * 0.9 > 400 ? 400.0 : screenWidth * 0.9;
     final horizontalMargin = screenWidth * 0.05; 
     final innerPadding = screenWidth * 0.06;
-    final titleFontSize = screenWidth * 0.07;
-    final inputFontSize = screenWidth * 0.04; 
+    final titleFontSize = screenWidth * 0.075;
+    
+    // Increased Font Size for Input Text (approx 18-20px on mobile)
+    final inputFontSize = screenWidth * 0.048; 
+
+    // Reusable Input Style to keep the build method clean
+    final TextStyle inputTextStyle = TextStyle(
+      fontSize: inputFontSize,
+      fontWeight: FontWeight.w600, // Semi-bold for better clarity
+      color: const Color(0xFF2d3436), // High contrast dark grey/black
+      letterSpacing: 0.5,
+    );
 
     return ConstrainedBox(
       constraints: BoxConstraints(
@@ -177,12 +148,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         padding: EdgeInsets.all(innerPadding),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(25),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.15),
-              blurRadius: 20,
-              spreadRadius: 3,
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 25,
+              spreadRadius: 5,
             ),
           ],
         ),
@@ -197,6 +168,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 fontSize: titleFontSize,
                 fontWeight: FontWeight.w900,
                 color: const Color(0xFF3B5998),
+                letterSpacing: -0.5,
               ),
             ),
             SizedBox(height: screenHeight * 0.03), 
@@ -204,59 +176,35 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             // Username Field
             TextField(
               controller: _usernameController,
-              style: TextStyle(fontSize: inputFontSize),
-              decoration: InputDecoration(
-                labelText: "Username",
-                prefixIcon: Icon(Icons.person, color: primaryColor),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
+              style: inputTextStyle,
+              decoration: _buildInputDecoration("Username", Icons.person),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
 
             // Email Field
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
-              style: TextStyle(fontSize: inputFontSize),
-              decoration: InputDecoration(
-                labelText: "Email Address",
-                prefixIcon: Icon(Icons.email, color: primaryColor),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
+              style: inputTextStyle,
+              decoration: _buildInputDecoration("Email Address", Icons.email),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
 
             // Password Field
             TextField(
               controller: _passwordController,
               obscureText: true,
-              style: TextStyle(fontSize: inputFontSize),
-              decoration: InputDecoration(
-                labelText: "Password",
-                prefixIcon: Icon(Icons.lock, color: primaryColor),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
+              style: inputTextStyle,
+              decoration: _buildInputDecoration("Password", Icons.lock),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
 
             // Confirm Password Field
             TextField(
               controller: _confirmPasswordController,
               obscureText: true,
-              style: TextStyle(fontSize: inputFontSize),
-              decoration: InputDecoration(
-                labelText: "Confirm Password",
-                prefixIcon: Icon(Icons.lock_reset, color: primaryColor),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
+              style: inputTextStyle,
+              decoration: _buildInputDecoration("Confirm Password", Icons.lock_reset),
             ),
             SizedBox(height: screenHeight * 0.04),
 
@@ -271,9 +219,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: primaryColor.withOpacity(0.4),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
+                    color: primaryColor.withOpacity(0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
@@ -282,7 +230,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   shadowColor: Colors.transparent,
-                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.025),
+                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.022),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -293,11 +241,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     fontSize: screenWidth * 0.045,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
+                    letterSpacing: 1.2,
                   ),
                 ),
               ),
             ),
-            SizedBox(height: screenHeight * 0.04),
+            SizedBox(height: screenHeight * 0.035),
 
             // Login Link
             Row(
@@ -305,14 +254,14 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               children: [
                 Text(
                   "Already have an account? ",
-                  style: TextStyle(fontSize: screenWidth * 0.035, color: Colors.black54),
+                  style: TextStyle(fontSize: screenWidth * 0.038, color: Colors.black54),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pushReplacementNamed('/login');
-                    },
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushReplacementNamed('/login');
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Text(
                       "LOG IN",
                       style: TextStyle(
@@ -327,6 +276,34 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  // Helper to build consistent, readable input decoration
+  InputDecoration _buildInputDecoration(String label, IconData icon) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: TextStyle(
+        color: primaryColor.withOpacity(0.8),
+        fontWeight: FontWeight.w500,
+      ),
+      prefixIcon: Icon(icon, color: primaryColor, size: 22),
+      // Increased padding to accommodate larger text
+      contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      filled: true,
+      fillColor: Colors.grey.shade50,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: BorderSide(color: Colors.grey.shade300),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: BorderSide(color: Colors.grey.shade200),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: BorderSide(color: primaryColor, width: 2),
       ),
     );
   }
