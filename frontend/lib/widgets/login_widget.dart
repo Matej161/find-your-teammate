@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../services/login_service.dart';
-import '../services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart'; 
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
@@ -12,75 +11,130 @@ class LoginWidget extends StatefulWidget {
 class _LoginWidgetState extends State<LoginWidget> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _loginService = LoginService();
-  final _authService = AuthService();
-  
-  bool _isLoading = false;
-  String? _errorMessage;
 
   // Custom colors for a friendly, light look
   final Color primaryColor = const Color(0xFF4895ef); // Blue
   final Color secondaryColor = const Color(0xFF4cc9f0); // Light Blue/Teal
   final Color accentColor = const Color(0xFFF77F00); // Orange
 
+  // Track the current toast to remove it if a new one appears
+  OverlayEntry? _currentToast;
+
+  // --- CUSTOM TOP NOTIFICATION HELPER ---
+  void _showTopToast(String message, Color bgColor, IconData icon) {
+    // 1. Remove existing toast if visible
+    _currentToast?.remove();
+
+    // 2. Create the OverlayEntry
+    _currentToast = OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.of(context).padding.top + 10, // Safe area + 10px margin
+        left: 20,
+        right: 20,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(30), // Rounded "Pill" shape
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, color: Colors.white, size: 28), // Big Icon
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    message,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16, // Bigger Font
+                      fontWeight: FontWeight.bold, // Bold Font
+                      fontFamily: 'Roboto', // Default nicely readable font
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // 3. Insert into the screen
+    Overlay.of(context).insert(_currentToast!);
+
+    // 4. Auto-remove after 3 seconds
+    Future.delayed(const Duration(seconds: 3), () {
+      if (_currentToast != null) {
+        _currentToast?.remove();
+        _currentToast = null;
+      }
+    });
+  }
+
+  // --- LOGIN LOGIC ---
+  Future<void> _handleLogin() async {
+    // A. Show a loading circle so user knows something is happening
+    showDialog(
+      context: context,
+      barrierDismissible: false, 
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      // B. Talk to Firebase Backend
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      // C. Close the loading circle
+      if (mounted) Navigator.pop(context);
+
+      if (mounted) {
+        // D. SUCCESS NOTIFICATION (Top Toast)
+        _showTopToast('Login Successful! Welcome back.', Colors.green.shade600, Icons.check_circle_outline);
+        
+        // E. Navigate
+        Navigator.of(context).pushReplacementNamed('/gameselection');
+      }
+
+    } on FirebaseAuthException catch (e) {
+      // C. Close the loading circle
+      if (mounted) Navigator.pop(context);
+
+      // D. FAILURE NOTIFICATION (Top Toast)
+      String message = 'An error occurred';
+      if (e.code == 'user-not-found') {
+        message = 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        message = 'Wrong password provided.';
+      } else if (e.code == 'invalid-email') {
+        message = 'The email address is not valid.';
+      }
+
+      if (mounted) {
+        _showTopToast(message, Colors.redAccent, Icons.cancel_outlined);
+      }
+    }
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    // Remove toast if screen is closed to prevent errors
+    _currentToast?.remove(); 
     super.dispose();
-  }
-
-  Future<void> _handleLogin() async {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
-
-    // Basic validation
-    if (email.isEmpty || password.isEmpty) {
-      setState(() {
-        _errorMessage = 'Please enter both email and password';
-      });
-      return;
-    }
-
-    // Email validation
-    if (!email.contains('@')) {
-      setState(() {
-        _errorMessage = 'Please enter a valid email address';
-      });
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
-
-    try {
-      final response = await _loginService.login(email, password);
-
-      if (response.success) {
-        // Save user session
-        if (response.userId != null && response.userName != null) {
-          await _authService.saveUserSession(response.userId!, response.userName!);
-        }
-        
-        // Login successful - navigate to home screen
-        if (mounted) {
-          Navigator.of(context).pushReplacementNamed('/home');
-        }
-      } else {
-        // Login failed - show error message
-        setState(() {
-          _isLoading = false;
-          _errorMessage = response.message ?? 'Login failed. Please try again.';
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'An error occurred. Please try again.';
-      });
-    }
   }
 
   @override
@@ -149,7 +203,6 @@ class _LoginWidgetState extends State<LoginWidget> {
               controller: _passwordController,
               obscureText: true,
               style: TextStyle(fontSize: inputFontSize),
-              onSubmitted: (_) => _handleLogin(),
               decoration: InputDecoration(
                 labelText: "Password",
                 prefixIcon: Icon(Icons.lock, color: primaryColor),
@@ -159,21 +212,6 @@ class _LoginWidgetState extends State<LoginWidget> {
               ),
             ),
             const SizedBox(height: 10),
-
-            // Error Message Display
-            if (_errorMessage != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Text(
-                  _errorMessage!,
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.035,
-                    color: Colors.red,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
 
             // Forgot Password Link
             GestureDetector(
@@ -214,19 +252,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ],
               ),
               child: ElevatedButton(
-<<<<<<< HEAD
-                onPressed: () {
-                  // Simply navigate to the Game Selection screen on click
-                  // In a real app, you would validate the email/password first
-                  Navigator.of(context).pushReplacementNamed('/gameselection');
-                },
-=======
-                onPressed: () {
-                  // Simply navigate to the Game Selection screen on click
-                  // In a real app, you would validate the email/password first
-                  Navigator.of(context).pushReplacementNamed('/gameselection');
-                },
->>>>>>> b5bf01446a2dd0dd11a0e6b1096506750b9e72b9
+                onPressed: _handleLogin, 
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent, 
                   shadowColor: Colors.transparent, 
@@ -234,9 +260,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  disabledBackgroundColor: Colors.grey,
                 ),
-<<<<<<< HEAD
                 child: Text(
                   "L O G I N",
                   style: TextStyle(
@@ -245,16 +269,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                     color: Colors.white,
                   ),
                 ),
-=======
-                child: Text(
-                  "L O G I N",
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.045, 
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
->>>>>>> b5bf01446a2dd0dd11a0e6b1096506750b9e72b9
               ),
             ),
             SizedBox(height: screenHeight * 0.04), 
@@ -284,6 +298,24 @@ class _LoginWidgetState extends State<LoginWidget> {
                   ),
                 ),
               ],
+            ),
+
+            // --- DEV SKIP BUTTON ---
+            SizedBox(height: screenHeight * 0.02),
+            TextButton(
+              onPressed: () {
+                // Skips login logic and goes straight to games
+                Navigator.of(context).pushReplacementNamed('/gameselection');
+              },
+              child: const Text(
+                "Skip Login (Dev Mode)",
+                style: TextStyle(
+                  color: Colors.grey, 
+                  fontSize: 12,
+                  fontStyle: FontStyle.italic,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
             ),
           ],
         ),

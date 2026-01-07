@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/navbar_widget.dart';
 import '../models/squad.dart';
+import '../SignalRContracts.dart';
 
 class GameServerScreen extends StatefulWidget {
   final String gameName;
@@ -32,6 +33,8 @@ class _GameServerScreenState extends State<GameServerScreen> with TickerProvider
         });
         _chatController.clear();
       });
+
+      SignalRContracts().sendMessage(widget.gameName, _chatController.text);
 
       // Auto-scroll to bottom after the message is rendered
       WidgetsBinding.instance.addPostFrameCallback((_) {

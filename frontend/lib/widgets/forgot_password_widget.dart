@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // 1. Import Firebase
 
 class ForgotPasswordWidget extends StatefulWidget {
   const ForgotPasswordWidget({super.key});
@@ -13,54 +14,138 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
   // Custom colors matching the application theme
   final Color primaryColor = const Color(0xFF4895ef); // Blue
   final Color secondaryColor = const Color(0xFF4cc9f0); // Light Blue/Teal
-  final Color accentColor = const Color(0xFFF77F00); // Orange (for highlights/links)
+  final Color accentColor = const Color(0xFFF77F00); // Orange
+
+  // Track the current toast
+  OverlayEntry? _currentToast;
+
+  // --- CUSTOM TOP NOTIFICATION HELPER ---
+  void _showTopToast(String message, Color bgColor, IconData icon) {
+    _currentToast?.remove();
+
+    _currentToast = OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.of(context).padding.top + 10,
+        left: 20,
+        right: 20,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, color: Colors.white, size: 28),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    message,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(_currentToast!);
+
+    Future.delayed(const Duration(seconds: 3), () {
+      if (_currentToast != null) {
+        _currentToast?.remove();
+        _currentToast = null;
+      }
+    });
+  }
+
+  // --- PASSWORD RESET LOGIC ---
+  Future<void> _handleResetPassword() async {
+    final email = _emailController.text.trim();
+    
+    // 0. Validation
+    if (email.isEmpty) {
+      _showTopToast('Please enter your email.', Colors.orangeAccent, Icons.warning_amber_rounded);
+      return;
+    }
+
+    // A. Show loading circle
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+    
+    try {
+      // B. Send Password Reset Email via Firebase
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+
+      // C. Close loading circle
+      if (mounted) Navigator.pop(context);
+
+      // D. Success Notification
+      if (mounted) {
+        _showTopToast('Reset link sent! Check your email.', Colors.green.shade600, Icons.mark_email_read);
+        
+        // E. Navigate back to login after a short delay
+        Future.delayed(const Duration(seconds: 2), () {
+          if (mounted) {
+            Navigator.of(context).pushReplacementNamed('/login');
+          }
+        });
+      }
+
+    } on FirebaseAuthException catch (e) {
+      // C. Close loading circle
+      if (mounted) Navigator.pop(context);
+
+      // D. Error Notification
+      String message = 'An error occurred.';
+      if (e.code == 'user-not-found') {
+        message = 'No user found with this email.';
+      } else if (e.code == 'invalid-email') {
+        message = 'Invalid email address.';
+      }
+
+      if (mounted) {
+        _showTopToast(message, Colors.redAccent, Icons.error_outline);
+      }
+    }
+  }
 
   @override
   void dispose() {
     _emailController.dispose();
+    _currentToast?.remove(); // Cleanup toast
     super.dispose();
-  }
-
-  // Function to simulate sending the reset email
-  void _handleResetPassword() {
-    final email = _emailController.text;
-    if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter your email address.'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 2),
-        ),
-      );
-      return;
-    }
-    
-    // Show success message and simulate API call
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Password reset link sent to $email (simulated).'),
-        backgroundColor: Colors.green,
-        duration: const Duration(seconds: 3),
-      ),
-    );
-    
-    // Navigate back to login after showing success
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.of(context).pushReplacementNamed('/login');
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // 1. Get screen dimensions for responsive scaling
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // 2. Define responsive measurements
     final responsiveWidth = screenWidth * 0.9 > 380 ? 380.0 : screenWidth * 0.9;
     final horizontalMargin = screenWidth * 0.05; 
     final innerPadding = screenWidth * 0.06;
-    final titleFontSize = screenWidth * 0.07; // Responsive title size
+    final titleFontSize = screenWidth * 0.07; 
     final inputFontSize = screenWidth * 0.04; 
     final buttonFontSize = screenWidth * 0.045; 
 
@@ -97,7 +182,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
             ),
             SizedBox(height: screenHeight * 0.02),
 
-            // Instructional Text (Responsive)
+            // Instructional Text
             Text(
               "Enter your email address below and we'll send you a link to reset your password.",
               textAlign: TextAlign.center,
@@ -145,7 +230,6 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   shadowColor: Colors.transparent,
-                  // Larger vertical padding for easier touching on mobile
                   padding: EdgeInsets.symmetric(vertical: screenHeight * 0.025),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -154,7 +238,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                 child: Text(
                   "S E N D   L I N K",
                   style: TextStyle(
-                    fontSize: buttonFontSize, // Responsive font size
+                    fontSize: buttonFontSize,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -174,7 +258,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                   child: Text(
                     "Back to Login",
                     style: TextStyle(
-                      fontSize: screenWidth * 0.04, // Mobile-friendly size
+                      fontSize: screenWidth * 0.04,
                       fontWeight: FontWeight.bold,
                       color: accentColor,
                       decoration: TextDecoration.underline,
