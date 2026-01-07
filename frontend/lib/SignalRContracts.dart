@@ -75,6 +75,30 @@ class SignalRContracts {
     }
   }
 
+  Future<bool> canLogin(String email, String password) async {
+    final result = await _connection.invoke(
+        'CanLogin', 
+        args: [email, password],
+      );
+      return result as bool;
+  }
+
+  Future<bool> createAccount(String username, String email, String password) async {
+    final result = await _connection.invoke(
+      'CreateAccount', 
+      args: [username, email, password],
+    );
+    return result as bool;
+  }
+
+  Future<String> login(String email) async {
+    final result = await _connection.invoke(
+      'Login', 
+      args: [email],
+    );
+    return result as String;
+  }
+
   Future<void> dispose() async {
     await _messageController.close();
     await _connection.stop();

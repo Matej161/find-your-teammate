@@ -68,12 +68,13 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
     public bool CreateAccount(string username, string email, string password)
     {
         if (GetUserByEmail(email) != null) return false;
+        string pass = PasswordToHash(password);
         _backend.UserRepo.Add(new User()
         {
             Id = Guid.NewGuid(),
             Username = username,
             Email = email,
-            PasswordHash = PasswordToHash(password)
+            PasswordHash = pass
         });
         return true;
     }
@@ -81,23 +82,32 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
     private User? GetUserByEmail(string email)
     {
         // Najde prvního uživatele, který odpovídá, nebo vrátí null
+        try {
         var user = _backend.UserRepo.GetAll().FirstOrDefault(u => u.Email == email);
         return user;
+        }
+        catch(Exception) {
+            return null;
+        }
     }
 
     public bool CanLogin(string email, string password)
     {
         User? user = GetUserByEmail(email);
+        Console.WriteLine(user == null);
         if (user == null) return false;
+        Console.WriteLine(user.PasswordHash);
+        Console.WriteLine(PasswordToHash(password));
         if (user.PasswordHash.Equals(PasswordToHash(password))) return true;
-
+        Console.WriteLine("PASSWORD: " + password);
+        Console.WriteLine("NOT EQUALS");
         return false;
     }
 
     private string PasswordToHash(string password)
     {
         string hashed = password;
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 200; i++)
         {
             string curhashed = "";
             foreach (char c in hashed)
@@ -131,7 +141,7 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
                 {
                     s += (char) (c + 1);
                 }
-                curhashed = s;
+                curhashed += s;
             }
             hashed = curhashed;
         }
