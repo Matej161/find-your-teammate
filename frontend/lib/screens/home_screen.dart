@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/login_button_widget.dart'; // Assuming this import path is correct
+import 'package:frontend/widgets/login_button_widget.dart';
+import 'package:frontend/services/auth_service.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   // --- HELPER WIDGET FOR THE FEATURE LIST ---
   // This creates the Icon + Text rows
   Widget _buildFeatureItem({
@@ -50,6 +56,30 @@ class HomeScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+  final _authService = AuthService();
+  String? _userName;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInfo();
+  }
+
+  Future<void> _loadUserInfo() async {
+    final userName = await _authService.getUserName();
+    setState(() {
+      _userName = userName;
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _handleLogout() async {
+    await _authService.logout();
+    if (mounted) {
+      Navigator.of(context).pushReplacementNamed('/login');
+    }
   }
 
   @override
@@ -193,11 +223,53 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-            // --- TOP RIGHT LOGIN TEXT ---
-            const SafeArea(
+            // --- TOP RIGHT LOGIN/LOGOUT BUTTON ---
+            SafeArea(
               child: Align(
                 alignment: Alignment.topRight,
-                child: HomeNavButtonWidget(),
+                child: _isLoading
+                    ? const SizedBox.shrink()
+                    : _userName != null
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 40.0, right: 20.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'Welcome, $_userName!',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                TextButton(
+                                  onPressed: _handleLogout,
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: Colors.white.withOpacity(0.4),
+                                    side: const BorderSide(
+                                      color: Colors.white,
+                                      width: 1.5,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+                                  ),
+                                  child: const Text(
+                                    "Logout",
+                                    style: TextStyle(
+                                      color: Color(0xFF1565C0),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : const HomeNavButtonWidget(),
               ),
             ),
           ],

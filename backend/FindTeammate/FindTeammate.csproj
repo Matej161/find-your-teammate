@@ -8,10 +8,13 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9"/>
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3"/>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\DatabaseRepository\DatabaseRepository.csproj" />
+      <ProjectReference Include="..\Backend\Backend.csproj" />
+      <ProjectReference Include="..\BackendRepository\BackendRepository.csproj" />
     </ItemGroup>
 
 </Project>

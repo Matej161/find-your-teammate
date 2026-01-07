@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Microsoft.Data.Sqlite;
 
 public static class Database
@@ -41,6 +44,7 @@ public static class Database
         }
         Console.WriteLine($"Tabulka '{tableName}' byla úspěšně vytvořena.");
     }
+
     
     public static void Insert<T>(T item) where T : class, new()
     {
@@ -249,6 +253,33 @@ public static class Database
         if (type == typeof(int) || type == typeof(long) || type == typeof(bool)) return "INTEGER";
         if (type == typeof(double) || type == typeof(float) || type == typeof(decimal)) return "REAL";
         if (type == typeof(DateTime)) return "TEXT";
+        return null;
+    }
+
+    public static Guid? GetIdByField(string tableName, string fieldName, string fieldValue)
+    {
+        string selectSql = $"SELECT Id FROM {tableName} WHERE {fieldName} = @value LIMIT 1";
+        
+        using (var connection = new SqliteConnection(DatabasePath))
+        {
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = selectSql;
+            command.Parameters.AddWithValue("@value", fieldValue);
+            
+            using (var reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    string idString = reader.GetString(0);
+                    if (Guid.TryParse(idString, out Guid userId))
+                    {
+                        return userId;
+                    }
+                }
+            }
+        }
+        
         return null;
     }
 }

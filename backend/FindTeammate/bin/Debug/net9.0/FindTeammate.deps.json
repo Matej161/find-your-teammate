@@ -8,11 +8,22 @@
     ".NETCoreApp,Version=v9.0": {
       "FindTeammate/1.0.0": {
         "dependencies": {
+          "BCrypt.Net-Next": "4.0.3",
+          "Backend": "1.0.0",
+          "BackendRepository": "1.0.0",
           "DatabaseRepository": "1.0.0",
           "Microsoft.AspNetCore.OpenApi": "9.0.9"
         },
         "runtime": {
           "FindTeammate.dll": {}
+        }
+      },
+      "BCrypt.Net-Next/4.0.3": {
+        "runtime": {
+          "lib/net6.0/BCrypt.Net-Next.dll": {
+            "assemblyVersion": "4.0.3.0",
+            "fileVersion": "4.0.3.0"
+          }
         }
       },
       "Microsoft.AspNetCore.OpenApi/9.0.9": {
@@ -65,9 +76,6 @@
         }
       },
       "SQLitePCLRaw.core/2.1.11": {
-        "dependencies": {
-          "System.Memory": "4.5.3"
-        },
         "runtime": {
           "lib/netstandard2.0/SQLitePCLRaw.core.dll": {
             "assemblyVersion": "2.1.11.2622",
@@ -205,7 +213,29 @@
           }
         }
       },
-      "System.Memory/4.5.3": {},
+      "Backend/1.0.0": {
+        "dependencies": {
+          "DatabaseRepository": "1.0.0"
+        },
+        "runtime": {
+          "Backend.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "BackendRepository/1.0.0": {
+        "dependencies": {
+          "Backend": "1.0.0",
+          "DatabaseRepository": "1.0.0"
+        },
+        "runtime": {
+          "BackendRepository.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "DatabaseRepository/1.0.0": {
         "dependencies": {
           "Microsoft.Data.Sqlite": "10.0.0-rc.2.25502.107"
@@ -224,6 +254,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "BCrypt.Net-Next/4.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-W+U9WvmZQgi5cX6FS5GDtDoPzUCV4LkBLkywq/kRZhuDwcbavOzcDAr3LXJFqHUi952Yj3LEYoWW0jbEUQChsA==",
+      "path": "bcrypt.net-next/4.0.3",
+      "hashPath": "bcrypt.net-next.4.0.3.nupkg.sha512"
     },
     "Microsoft.AspNetCore.OpenApi/9.0.9": {
       "type": "package",
@@ -281,12 +318,15 @@
       "path": "sqlitepclraw.provider.e_sqlite3/2.1.11",
       "hashPath": "sqlitepclraw.provider.e_sqlite3.2.1.11.nupkg.sha512"
     },
-    "System.Memory/4.5.3": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
-      "path": "system.memory/4.5.3",
-      "hashPath": "system.memory.4.5.3.nupkg.sha512"
+    "Backend/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "BackendRepository/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "DatabaseRepository/1.0.0": {
       "type": "project",
