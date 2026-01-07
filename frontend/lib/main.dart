@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 // restored imports
 import 'package:frontend/screens/forgot_password_screen.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
+// --- 1. FIREBASE IMPORTS ---
+// Required to initialize the Firebase "Engine"
+import 'package:firebase_core/firebase_core.dart';
+// This file was created by the 'flutterfire configure' command
+// It contains the API keys for Android and iOS
+import 'firebase_options.dart';
 
 // Import the Game Selection Screen
 import 'screens/game_selection_screen.dart';
 
-void main() {
+// --- 2. UPDATED MAIN FUNCTION ---
+// We add 'async' because connecting to Firebase takes a split second,
+// and we must wait for it to finish before showing the app.
+void main() async {
+  // This line ensures the "glue" between the widgets and the engine is ready.
+  // We MUST call this if we are doing anything asynchronous (like `await`) in main().
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // This connects your specific app to the Firebase project using the
+  // configuration found in firebase_options.dart
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -28,6 +47,11 @@ class MyApp extends StatelessWidget {
           seedColor: Colors.blue,
           brightness: Brightness.dark, // Enforces dark mode
         ),
+        
+        /*textTheme: GoogleFonts.quicksandTextTheme(
+          Theme.of(context).textTheme,
+        ),*/
+        
         scaffoldBackgroundColor: const Color(0xFF111827), // Deep dark background
         useMaterial3: true,
       ),
