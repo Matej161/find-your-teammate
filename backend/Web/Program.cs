@@ -10,6 +10,7 @@ var app = builder.Build();
 
 app.UseCors();
 app.MapHub<SignalRContracts>("/chatHub");
+new SignalRContracts();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
