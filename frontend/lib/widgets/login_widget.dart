@@ -89,28 +89,23 @@ class _LoginWidgetState extends State<LoginWidget> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Define responsive sizing based on screen width/height
-    // Ensure the form takes a maximum of 90% of the screen width on mobile, 
-    // but caps at 380 for larger devices.
+    // Define responsive sizing
     final responsiveWidth = screenWidth * 0.9 > 380 ? 380.0 : screenWidth * 0.9;
-    final horizontalMargin = screenWidth * 0.05; // 5% margin on each side
-    final innerPadding = screenWidth * 0.06; // 6% padding inside the box
-    final titleFontSize = screenWidth * 0.07; // ~28px on a Pixel 7 (411px wide)
+    final horizontalMargin = screenWidth * 0.05; 
+    final innerPadding = screenWidth * 0.06;
+    final titleFontSize = screenWidth * 0.07; 
     final inputFontSize = screenWidth * 0.04; 
 
-    // Use ConstrainedBox to ensure the widget is responsive but never too wide
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxWidth: responsiveWidth, // Responsive width up to 380
+        maxWidth: responsiveWidth, 
       ),
       child: Container(
-        // Use responsive horizontal margin
         margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
-        // Use responsive inner padding
         padding: EdgeInsets.all(innerPadding),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20), // Consistent rounding
+          borderRadius: BorderRadius.circular(20), 
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.15),
@@ -127,13 +122,12 @@ class _LoginWidgetState extends State<LoginWidget> {
               "Welcome Back!",
               textAlign: TextAlign.center,
               style: TextStyle(
-                // Responsive font size for the title
                 fontSize: titleFontSize,
                 fontWeight: FontWeight.w900,
                 color: const Color(0xFF3B5998),
               ),
             ),
-            SizedBox(height: screenHeight * 0.04), // Responsive vertical spacing
+            SizedBox(height: screenHeight * 0.04), 
 
             // Email Field
             TextField(
@@ -189,12 +183,11 @@ class _LoginWidgetState extends State<LoginWidget> {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
-                  // Responsive vertical padding
                   padding: EdgeInsets.only(bottom: screenHeight * 0.02),
                   child: Text(
                     "Forgot Password?",
                     style: TextStyle(
-                      fontSize: screenWidth * 0.035, // Slightly smaller responsive font
+                      fontSize: screenWidth * 0.035, 
                       color: accentColor,
                       fontWeight: FontWeight.w600,
                     ),
@@ -221,39 +214,52 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ],
               ),
               child: ElevatedButton(
-                onPressed: _isLoading ? null : _handleLogin,
+<<<<<<< HEAD
+                onPressed: () {
+                  // Simply navigate to the Game Selection screen on click
+                  // In a real app, you would validate the email/password first
+                  Navigator.of(context).pushReplacementNamed('/gameselection');
+                },
+=======
+                onPressed: () {
+                  // Simply navigate to the Game Selection screen on click
+                  // In a real app, you would validate the email/password first
+                  Navigator.of(context).pushReplacementNamed('/gameselection');
+                },
+>>>>>>> b5bf01446a2dd0dd11a0e6b1096506750b9e72b9
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent, // Important for gradient visibility
-                  shadowColor: Colors.transparent, // Remove default shadow
-                  // Responsive vertical padding for a comfortable tap target
+                  backgroundColor: Colors.transparent, 
+                  shadowColor: Colors.transparent, 
                   padding: EdgeInsets.symmetric(vertical: screenHeight * 0.025), 
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
                   disabledBackgroundColor: Colors.grey,
                 ),
-                child: _isLoading
-                    ? SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      )
-                    : Text(
-                        "L O G I N",
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.045, // Responsive font size
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+<<<<<<< HEAD
+                child: Text(
+                  "L O G I N",
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.045, 
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+=======
+                child: Text(
+                  "L O G I N",
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.045, 
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+>>>>>>> b5bf01446a2dd0dd11a0e6b1096506750b9e72b9
               ),
             ),
-            SizedBox(height: screenHeight * 0.04), // Responsive vertical spacing
+            SizedBox(height: screenHeight * 0.04), 
 
-            // Register Navigation Link (Made Bigger and Mobile-Friendly)
+            // Register Navigation Link
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -261,18 +267,16 @@ class _LoginWidgetState extends State<LoginWidget> {
                   "Don't have an account? ",
                   style: TextStyle(fontSize: screenWidth * 0.035, color: Colors.black54),
                 ),
-                // Wrap the GestureDetector in a Padding for a larger, more comfortable tap area
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
                   child: GestureDetector(
                     onTap: () {
-                      // Navigate to register screen
                       Navigator.of(context).pushReplacementNamed('/register');
                     },
                     child: Text(
                       "REGISTER",
                       style: TextStyle(
-                        fontSize: screenWidth * 0.04, // Slightly larger font size
+                        fontSize: screenWidth * 0.04, 
                         fontWeight: FontWeight.bold,
                         color: primaryColor,
                       ),

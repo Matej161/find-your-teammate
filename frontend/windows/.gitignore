@@ -9,7 +9,9 @@ flutter/ephemeral/
 # Visual Studio build-related files.
 x64/
 x86/
-
+backend/BackendRepository/obj
+backend/Backend/obj
+backend/SignalR/obj
 # Visual Studio cache files
 # files ending in .cache can be ignored
 *.[Cc]ache

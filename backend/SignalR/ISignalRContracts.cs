@@ -2,7 +2,7 @@
 
 public interface IChatClient
 {
-    Task ReceiveChatMessage(Backend.Message message);
+    Task ReceiveChatMessage(Backend.ChatMessage message);
     Task ReceiveEditMessage(Guid messageId, string newContent);
     Task ReceiveDeleteMessage(Guid messageId);
 }
