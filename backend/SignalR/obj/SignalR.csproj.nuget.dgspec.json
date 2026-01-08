@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\stepa\\Desktop\\test2\\backend\\SignalR\\SignalR.csproj": {}
+    "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj": {}
   },
   "projects": {
-    "C:\\Users\\stepa\\Desktop\\test2\\backend\\Backend\\Backend.csproj": {
+    "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\test2\\backend\\Backend\\Backend.csproj",
+        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "C:\\Users\\stepa\\Desktop\\test2\\backend\\Backend\\Backend.csproj",
+        "projectPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj",
         "packagesPath": "C:\\Users\\stepa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\stepa\\Desktop\\test2\\backend\\Backend\\obj\\",
+        "outputPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\stepa\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -20,14 +20,15 @@
           "net9.0"
         ],
         "sources": {
+          "C:\\Users\\stepa\\.dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\stepa\\Desktop\\test2\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
-                "projectPath": "C:\\Users\\stepa\\Desktop\\test2\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
+              "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+                "projectPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
               }
             }
           }
@@ -81,18 +82,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\stepa\\.dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\stepa\\.dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\stepa\\Desktop\\test2\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+    "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\test2\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
+        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
         "projectName": "DatabaseRepository",
-        "projectPath": "C:\\Users\\stepa\\Desktop\\test2\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
+        "projectPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
         "packagesPath": "C:\\Users\\stepa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\stepa\\Desktop\\test2\\backend\\DatabaseRepository\\obj\\",
+        "outputPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\stepa\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -101,6 +102,7 @@
           "net9.0"
         ],
         "sources": {
+          "C:\\Users\\stepa\\.dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -160,18 +162,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\stepa\\.dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\stepa\\.dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\stepa\\Desktop\\test2\\backend\\SignalR\\SignalR.csproj": {
+    "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\test2\\backend\\SignalR\\SignalR.csproj",
+        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
         "projectName": "SignalR",
-        "projectPath": "C:\\Users\\stepa\\Desktop\\test2\\backend\\SignalR\\SignalR.csproj",
+        "projectPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
         "packagesPath": "C:\\Users\\stepa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\stepa\\Desktop\\test2\\backend\\SignalR\\obj\\",
+        "outputPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\SignalR\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\stepa\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -180,14 +182,15 @@
           "net9.0"
         ],
         "sources": {
+          "C:\\Users\\stepa\\.dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\stepa\\Desktop\\test2\\backend\\Backend\\Backend.csproj": {
-                "projectPath": "C:\\Users\\stepa\\Desktop\\test2\\backend\\Backend\\Backend.csproj"
+              "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj": {
+                "projectPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj"
               }
             }
           }
@@ -243,7 +246,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\stepa\\.dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\stepa\\.dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
