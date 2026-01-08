@@ -168,7 +168,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         
         // Wait a tiny bit so they see the toast before navigating
         await Future.delayed(const Duration(milliseconds: 500));
-        if (mounted) Navigator.of(context).pushReplacementNamed('/gameselection');
+        if (mounted) Navigator.of(context).pushReplacementNamed('/login');
       } else {
         // Backend returned false (Generic error)
         _showTopToast("Account creation failed", const Color(0xFFFF0054), Icons.error_outline);

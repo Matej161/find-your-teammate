@@ -25,13 +25,15 @@ public class ChatManager
 
     public void SendMessage(Guid userId, Guid roomId, string text)
     {
+        string username = _userRepo.GetById(userId).Username;
         var msg = new ChatMessage
         {
             Id = Guid.NewGuid(),
             SenderId = userId,
             RoomId = roomId,
             Content = text,
-            Timestamp = DateTime.UtcNow
+            Timestamp = DateTime.UtcNow,
+            Username = username
         };
         _messageRepo.Add(msg);
     }

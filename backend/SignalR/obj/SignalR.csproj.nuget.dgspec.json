@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj": {}
+    "C:\\Users\\stepa\\Desktop\\lll\\backend\\SignalR\\SignalR.csproj": {}
   },
   "projects": {
-    "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj": {
+    "C:\\Users\\stepa\\Desktop\\lll\\backend\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj",
+        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\lll\\backend\\Backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj",
+        "projectPath": "C:\\Users\\stepa\\Desktop\\lll\\backend\\Backend\\Backend.csproj",
         "packagesPath": "C:\\Users\\stepa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\Backend\\obj\\",
+        "outputPath": "C:\\Users\\stepa\\Desktop\\lll\\backend\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\stepa\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -27,8 +27,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
-                "projectPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
+              "C:\\Users\\stepa\\Desktop\\lll\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+                "projectPath": "C:\\Users\\stepa\\Desktop\\lll\\backend\\DatabaseRepository\\DatabaseRepository.csproj"
               }
             }
           }
@@ -86,14 +86,14 @@
         }
       }
     },
-    "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
+    "C:\\Users\\stepa\\Desktop\\lll\\backend\\DatabaseRepository\\DatabaseRepository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
+        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\lll\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
         "projectName": "DatabaseRepository",
-        "projectPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
+        "projectPath": "C:\\Users\\stepa\\Desktop\\lll\\backend\\DatabaseRepository\\DatabaseRepository.csproj",
         "packagesPath": "C:\\Users\\stepa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\DatabaseRepository\\obj\\",
+        "outputPath": "C:\\Users\\stepa\\Desktop\\lll\\backend\\DatabaseRepository\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\stepa\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -166,14 +166,14 @@
         }
       }
     },
-    "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj": {
+    "C:\\Users\\stepa\\Desktop\\lll\\backend\\SignalR\\SignalR.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
+        "projectUniqueName": "C:\\Users\\stepa\\Desktop\\lll\\backend\\SignalR\\SignalR.csproj",
         "projectName": "SignalR",
-        "projectPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
+        "projectPath": "C:\\Users\\stepa\\Desktop\\lll\\backend\\SignalR\\SignalR.csproj",
         "packagesPath": "C:\\Users\\stepa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\SignalR\\obj\\",
+        "outputPath": "C:\\Users\\stepa\\Desktop\\lll\\backend\\SignalR\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\stepa\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -189,8 +189,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj": {
-                "projectPath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\Backend\\Backend.csproj"
+              "C:\\Users\\stepa\\Desktop\\lll\\backend\\Backend\\Backend.csproj": {
+                "projectPath": "C:\\Users\\stepa\\Desktop\\lll\\backend\\Backend\\Backend.csproj"
               }
             }
           }

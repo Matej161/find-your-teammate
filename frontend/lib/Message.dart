@@ -4,6 +4,7 @@ class Message {
   final String content;
   final DateTime timeSent;
   final String userId;
+  final String username;
 
   Message({
     required this.id,
@@ -11,6 +12,7 @@ class Message {
     required this.content,
     required this.timeSent,
     required this.userId,
+    required this.username
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Message {
       content: json['content'],
       timeSent: DateTime.parse(json['timestamp']),
       userId: json['senderId'],
+      username: json["username"]
     );
   }
 }

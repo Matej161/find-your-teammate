@@ -32,11 +32,15 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
 
     public async Task SendChatMessage(string roomId, string content, Guid userId)
     {
+        User user = _backend.UserRepo.GetById(userId);
+        string username = user.Username;
         var message = new ChatMessage() {Id = Guid.NewGuid(),
             SenderId = userId,
             RoomId = Guid.Parse(roomId),
             Timestamp = DateTime.UtcNow,
-            Content = content};
+            Content = content,
+            Username = username
+        };
 
         _backend.Chat.SendMessage(userId, Guid.Parse(roomId), content);
 
@@ -151,6 +155,11 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
     public string Login(string email)
     {
         return GetUserByEmail(email).Id.ToString();
+    }
+
+    public string GetUsername(Guid guid)
+    {
+        return _backend.UserRepo.GetById(guid).Username;
     }
 
     public async Task SendDeleteMessage(Guid messageId)
