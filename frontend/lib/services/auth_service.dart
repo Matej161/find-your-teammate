@@ -39,6 +39,8 @@ class AuthService {
     await prefs.setBool(_isLoggedInKey, false);
   }
 
+  
+
   // Get all user info
   Future<Map<String, String?>> getUserInfo() async {
     final prefs = await SharedPreferences.getInstance();

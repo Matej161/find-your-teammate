@@ -146,9 +146,15 @@ class _LoginWidgetState extends State<LoginWidget> {
       if (!mounted) return;
 
       if (canLogin) {
+        String guid = await signalRContracts.login(_emailController.text);
         _showTopToast('Welcome back! 👋', const Color(0xFF06D6A0), Icons.waving_hand); // Teal/Green
         await Future.delayed(const Duration(milliseconds: 500));
-        if (mounted) Navigator.of(context).pushReplacementNamed('/gameselection');
+        if (mounted) {
+          Navigator.of(context).pushReplacementNamed(
+                    '/gameselection',
+                    arguments: guid, // Zde pošleš své GUID
+                  );
+        }
       } else {
         _showTopToast("Invalid email or password", const Color(0xFFFF0054), Icons.lock_open); // Red/Pink
       }

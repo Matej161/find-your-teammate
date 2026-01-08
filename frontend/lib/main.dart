@@ -68,7 +68,15 @@ class MyApp extends StatelessWidget {
         '/forgottenpassword': (context) => const ForgotPasswordScreen(),
         
         // The new screen
-        '/gameselection': (context) => const GameSelectionScreen(),
+        '/gameselection': (context) {
+          // 1. Získáme argumenty z aktuální cesty (ModalRoute)
+          // Použijeme 'as String', protože víme, že posíláme text.
+          // Pokud by argument mohl chybět, je lepší použít bezpečnější přístup (viz níže).
+          final args = ModalRoute.of(context)!.settings.arguments as String;
+
+          // 2. Předáme získaný argument do widgetu
+          return GameSelectionScreen(guid: args);
+        },
         '/profile': (context) => const ProfileScreen(),
         
         // NOTE: '/gameserver' is NOT here because it is dynamic (handled in game_selection_screen.dart)

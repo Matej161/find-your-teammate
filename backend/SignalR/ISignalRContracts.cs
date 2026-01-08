@@ -21,5 +21,6 @@ public interface IChatServer
     bool CreateAccount(string username, string email, string password);
     bool CanLogin(string email, string password);
     string Login(string email);
+    string GetUsername(Guid guid);
 
 }

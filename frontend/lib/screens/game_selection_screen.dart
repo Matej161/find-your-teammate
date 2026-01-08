@@ -4,7 +4,8 @@ import '../widgets/game_selection_widget.dart';
 import '../widgets/navbar_widget.dart'; // Import your new widget
 
 class GameSelectionScreen extends StatelessWidget {
-  const GameSelectionScreen({super.key});
+  final String guid;
+  const GameSelectionScreen({super.key, required this.guid});
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +86,7 @@ class GameSelectionScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => GameServerScreen(gameName: games[index]['name']),
+                          builder: (context) => GameServerScreen(guid: guid, gameName: games[index]['name']),
                         ),
                       );
                     },

@@ -10,7 +10,8 @@ import 'lobby_screen.dart';
 
 class GameServerScreen extends StatefulWidget {
   final String gameName;
-  const GameServerScreen({super.key, required this.gameName});
+  final String guid;
+  const GameServerScreen({super.key, required this.gameName, required this.guid});
 
   @override
   State<GameServerScreen> createState() => _GameServerScreenState();
@@ -38,8 +39,7 @@ class _GameServerScreenState extends State<GameServerScreen> with TickerProvider
   // Store squads per channel - each game has its own list
   final Map<String, List<Squad>> _squadsByChannel = {};
   String channelId = "";
-  final String userId = "7e422e7e-2032-49d1-bace-19cfc68bb08e"; // TODO: Get from auth
-  
+
   // Get squads for current channel
   List<Squad> get squads => _squadsByChannel[channelId] ?? [];
 
@@ -47,7 +47,8 @@ class _GameServerScreenState extends State<GameServerScreen> with TickerProvider
   // 2. UPDATED: Send logic now triggers the scroll
   void _sendMessage() async {
     if (_chatController.text.isNotEmpty) {
-      await _signalRContracts.sendMessage(channelId, _chatController.text, userId);
+      print(widget.guid);
+      await _signalRContracts.sendMessage(channelId, _chatController.text, widget.guid);
       loadMessages();
 
       // Auto-scroll to bottom after the message is rendered
@@ -178,14 +179,14 @@ class _GameServerScreenState extends State<GameServerScreen> with TickerProvider
               itemCount: messages.length,
               itemBuilder: (context, index) {
                 final message = messages[index];
-                final isMe = message.userId == userId;
+                final isMe = message.userId == widget.guid;
                 return Align(
                   alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 5),
                     child: SlideableMessage(
                       content: message.content,
-                      userId: isMe ? "You" : (message.userId ?? "Unknown"),
+                      userId: isMe ? "You" : (message.username ?? "Unknown"),
                       timestamp: message.timeSent,
                       isMe: isMe,
                       backgroundColor: isMe ? brandBlue : Colors.white,
