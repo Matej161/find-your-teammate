@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dbu/IKCdS5s=",
+  "dgSpecHash": "2tGumZJQX9I=",
   "success": true,
-  "projectFilePath": "C:\\Users\\stepa\\Desktop\\test2\\backend\\SignalR\\SignalR.csproj",
+  "projectFilePath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\stepa\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.3.0\\microsoft.aspnetcore.authentication.abstractions.2.3.0.nupkg.sha512",
     "C:\\Users\\stepa\\.nuget\\packages\\microsoft.aspnetcore.authorization\\2.3.0\\microsoft.aspnetcore.authorization.2.3.0.nupkg.sha512",

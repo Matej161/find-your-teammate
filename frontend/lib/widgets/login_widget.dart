@@ -21,48 +21,78 @@ class _LoginWidgetState extends State<LoginWidget> {
   // Track the current toast to remove it if a new one appears
   OverlayEntry? _currentToast;
 
-  // --- CUSTOM TOP NOTIFICATION HELPER ---
-  void _showTopToast(String message, Color bgColor, IconData icon) {
+  // --- CUSTOM TOP NOTIFICATION HELPER (Same as Register) ---
+  void _showTopToast(String message, Color baseColor, IconData icon) {
     _currentToast?.remove();
 
     _currentToast = OverlayEntry(
       builder: (context) => Positioned(
-        top: MediaQuery.of(context).padding.top + 10,
+        top: MediaQuery.of(context).padding.top + 15, // Safe area + margin
         left: 20,
         right: 20,
         child: Material(
           color: Colors.transparent,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            decoration: BoxDecoration(
-              color: bgColor,
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon, color: Colors.white, size: 28),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    message,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Roboto',
+          // Bouncy pop animation
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0.8, end: 1.0),
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.elasticOut,
+            builder: (context, value, child) {
+              return Transform.scale(
+                scale: value,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [baseColor, baseColor.withOpacity(0.8)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: baseColor.withOpacity(0.4),
+                        blurRadius: 15,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.25),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(icon, color: Colors.white, size: 28),
+                      ),
+                      const SizedBox(width: 15),
+                      Expanded(
+                        child: Text(
+                          message,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900, 
+                            letterSpacing: 0.5,
+                            fontFamily: 'Roboto', 
+                            shadows: [
+                              Shadow(
+                                offset: Offset(1, 1),
+                                blurRadius: 2,
+                                color: Colors.black12,
+                              )
+                            ]
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
@@ -70,7 +100,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
     Overlay.of(context).insert(_currentToast!);
 
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(milliseconds: 3500), () {
       if (_currentToast != null) {
         _currentToast?.remove();
         _currentToast = null;
@@ -78,30 +108,56 @@ class _LoginWidgetState extends State<LoginWidget> {
     });
   }
 
-  // --- LOGIN LOGIC ---
+  // --- LOGIN LOGIC (Preserved SignalR Logic) ---
   Future<void> _handleLogin() async {
-    SignalRContracts signalRContracts = SignalRContracts();
-    
-    // Connect to the service
-    await signalRContracts.connect();
-    
-    if (_passwordController.text.isNotEmpty) {
+    // Basic UI Validation
+    if (_emailController.text.isEmpty) {
+       _showTopToast("Email needed!", const Color(0xFFFF9F1C), Icons.mark_email_unread);
+       return;
+    }
+
+    if (_passwordController.text.isEmpty) {
+      _showTopToast("Password cannot be empty", const Color(0xFFFF9F1C), Icons.key_off);
+      return;
+    }
+
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      SignalRContracts signalRContracts = SignalRContracts();
+      
+      // Connect to the service
+      await signalRContracts.connect();
+      
       // Server call for login validation
       bool canLogin = await signalRContracts.canLogin(
         _emailController.text, 
         _passwordController.text
       );
 
+      // Close loader
+      if (mounted) Navigator.pop(context);
+
       if (!mounted) return;
 
       if (canLogin) {
-        _showTopToast('Welcome back!', Colors.green.shade600, Icons.check_circle_outline);
-        Navigator.of(context).pushReplacementNamed('/gameselection');
+        _showTopToast('Welcome back! 👋', const Color(0xFF06D6A0), Icons.waving_hand); // Teal/Green
+        await Future.delayed(const Duration(milliseconds: 500));
+        if (mounted) Navigator.of(context).pushReplacementNamed('/gameselection');
       } else {
-        _showTopToast("Invalid email or password", Colors.redAccent, Icons.cancel_outlined);
+        _showTopToast("Invalid email or password", const Color(0xFFFF0054), Icons.lock_open); // Red/Pink
       }
-    } else {
-      _showTopToast("Password cannot be empty", Colors.orangeAccent, Icons.warning_amber_rounded);
+    } catch (e) {
+      // Close loader if crash
+      if (mounted && Navigator.canPop(context)) Navigator.pop(context);
+      
+      if (mounted) _showTopToast("Connection Error", Colors.red, Icons.wifi_off);
+      print("Login Error: $e");
     }
   }
 
