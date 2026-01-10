@@ -335,22 +335,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               ],
             ),
 
-            // Dev Mode Skip
-            SizedBox(height: screenHeight * 0.02),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/gameselection');
-              },
-              child: const Text(
-                "Skip Login (Dev Mode)",
-                style: TextStyle(
-                  color: Colors.grey, 
-                  fontSize: 12,
-                  fontStyle: FontStyle.italic,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
+            
           ],
         ),
       ),
