@@ -132,6 +132,17 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       _showTopToast("Type a password!", const Color(0xFFFF9F1C), Icons.key_off); // Orange
       return;
     }
+    final email = _emailController.text.trim();
+final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+
+if (!emailRegex.hasMatch(email)) {
+  _showTopToast(
+    "Enter a valid email address",
+    const Color(0xFFFF0054),
+    Icons.alternate_email,
+  );
+  return;
+}
 
     if (_passwordController.text != _confirmPasswordController.text) {
       _showTopToast("Passwords don't match!", const Color(0xFFFF0054), Icons.compare_arrows); // Bright Red/Pink
