@@ -4,8 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../widgets/navbar_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
-  // Předpokládám, že při přihlášení si ukládáš userId někam globálně 
-  // nebo ho máš k dispozici. Pokud ne, pro test tam teď dej natvrdo ID usera z DB.
   final String userId; 
 
   const ProfileScreen({super.key, required this.userId});
@@ -22,7 +20,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _displayName = "";
   bool _isLoading = true;
   
-  // Používáme tvou SignalR třídu
   final SignalRContracts _signalR = SignalRContracts();
 
   @override
@@ -39,22 +36,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _initAndLoad() async {
     try {
-      // 1. Připojení
       await _signalR.connect();
-      
-      // 2. Načtení jména z tvého backendu přes userId
       final name = await _signalR.getUsername(widget.userId);
       
       if (mounted) {
         setState(() {
-          _displayName = name ?? "Uživatel nenalezen";
+          _displayName = name ?? "User not found";
           _isLoading = false;
         });
       }
     } catch (e) {
       if (mounted) {
         setState(() {
-          _displayName = "Chyba spojení";
+          _displayName = "Connection error";
           _isLoading = false;
         });
       }
@@ -73,7 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ).then((updated) {
       if (updated == true) {
         setState(() => _isLoading = true);
-        _initAndLoad(); // Znovu načte data po změně
+        _initAndLoad(); 
       }
     });
   }
@@ -82,7 +76,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: iceBackground,
-      appBar: NavbarWidget(title: 'MŮJ PROFIL', showBackButton: true, userId: widget.userId,),
+      appBar: NavbarWidget(
+        title: 'MY PROFILE', 
+        showBackButton: true, 
+        userId: widget.userId,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -106,8 +104,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Uživatelské jméno', 
-                          style: GoogleFonts.quicksand(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold)),
+                        Text(
+                          'Username', 
+                          style: GoogleFonts.quicksand(
+                            fontSize: 12, 
+                            color: Colors.grey, 
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
                         IconButton(
                           icon: const Icon(Icons.edit, color: brandBlue, size: 20),
                           onPressed: () => _showEditUsernameDialog(context),
@@ -122,8 +126,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: _isLoading 
-                        ? const Center(child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))) 
-                        : Text(_displayName, style: GoogleFonts.quicksand(color: brandNavy, fontSize: 16, fontWeight: FontWeight.bold)),
+                        ? const Center(
+                            child: SizedBox(
+                              height: 20, 
+                              width: 20, 
+                              child: CircularProgressIndicator(strokeWidth: 2)
+                            )
+                          ) 
+                        : Text(
+                            _displayName, 
+                            style: GoogleFonts.quicksand(
+                              color: brandNavy, 
+                              fontSize: 16, 
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
                     ),
                   ],
                 ),
@@ -136,7 +153,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-// --- DIALOG BEZ FIREBASE ---
 class EditUsernameDialog extends StatefulWidget {
   final String userId;
   final String currentName;
@@ -155,6 +171,8 @@ class EditUsernameDialog extends StatefulWidget {
 
 class _EditUsernameDialogState extends State<EditUsernameDialog> {
   late TextEditingController _controller;
+  static const Color brandBlue = Color(0xFF1E88E5);
+  static const Color brandNavy = Color(0xFF102060);
 
   @override
   void initState() {
@@ -171,21 +189,65 @@ class _EditUsernameDialogState extends State<EditUsernameDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Změnit jméno'),
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: Text(
+        'Change Username',
+        style: GoogleFonts.quicksand(
+          fontWeight: FontWeight.bold,
+          color: brandNavy,
+        ),
+      ),
       content: TextField(
         controller: _controller,
-        decoration: const InputDecoration(labelText: 'Nové jméno'),
+        style: GoogleFonts.quicksand(color: brandNavy),
+        decoration: InputDecoration(
+          labelText: 'New username',
+          labelStyle: GoogleFonts.quicksand(color: Colors.grey),
+          filled: true,
+          fillColor: const Color(0xFFF5F8FA),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: brandBlue, width: 2),
+          ),
+        ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Zrušit')),
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: Text(
+            'Cancel',
+            style: GoogleFonts.quicksand(
+              color: Colors.grey, 
+              fontWeight: FontWeight.bold
+            ),
+          ),
+        ),
         ElevatedButton(
           onPressed: () async {
             if (_controller.text.isEmpty) return;
-            // Voláme tvůj SignalR
-            bool success = await widget.signalR.changeUsername(widget.userId, _controller.text);
+            bool success = await widget.signalR.changeUsername(
+              widget.userId, 
+              _controller.text
+            );
             if (mounted) Navigator.pop(context, success);
-          }, 
-          child: const Text('Uložit')
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: brandBlue,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            elevation: 0,
+          ),
+          child: Text(
+            'Save',
+            style: GoogleFonts.quicksand(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ],
     );

@@ -255,7 +255,7 @@ class _GameServerScreenState extends State<GameServerScreen> with TickerProvider
   Widget _buildSquadList() {
     const Color brandNavy = Color(0xFF102060);
     
-    if (squads.isEmpty) {
+    if (true) {
       return Center(
         child: Text(
           "No active squads yet.\nBe the first to create one!",
@@ -434,7 +434,6 @@ class _CreateSquadDialogState extends State<_CreateSquadDialog> {
     );
     
     widget.onSquadCreated(newSquad);
-    Navigator.of(context).pop();
   }
 
   @override
