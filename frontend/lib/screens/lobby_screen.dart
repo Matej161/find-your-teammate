@@ -146,6 +146,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
           onBackPressed: () async {
             await _onWillPop();
           },
+          userId: "",
         ),
         body: Column(
           children: [

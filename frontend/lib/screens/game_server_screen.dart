@@ -50,6 +50,9 @@ class _GameServerScreenState extends State<GameServerScreen> with TickerProvider
       print(widget.guid);
       await _signalRContracts.sendMessage(channelId, _chatController.text, widget.guid);
       loadMessages();
+      setState(() {
+        _chatController.clear();
+      });
 
       // Auto-scroll to bottom after the message is rendered
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -68,6 +71,23 @@ class _GameServerScreenState extends State<GameServerScreen> with TickerProvider
     try {
       // 1. Zavoláš funkci s await
       final history = await _signalRContracts.getChatHistory(channelId);
+
+      Map<String, String> userCache = {};
+
+        // 3. Projdeme každou zprávu v historii
+        for (var message in history) {
+          String uid = message.userId; // Předpokládám, že objekt Message má userId
+
+          // Pokud jméno pro toto ID ještě v cache nemáme, stáhneme ho z DB
+          if (!userCache.containsKey(uid)) {
+            print("Načítám jméno z DB pro: $uid");
+            final dbUsername = await _signalRContracts.getUsername(uid);
+            userCache[uid] = dbUsername ?? "Neznámý uživatel";
+          }
+
+          // 4. Přepíšeme jméno ve zprávě tím aktuálním z DB
+          message.username = userCache[uid]!;
+        }
 
       // 2. Aktualizuješ stav aplikace, aby se zprávy vykreslily
       setState(() {
@@ -113,7 +133,7 @@ class _GameServerScreenState extends State<GameServerScreen> with TickerProvider
 
     return Scaffold(
       backgroundColor: const Color(0xFFE8F1F9),
-      appBar: NavbarWidget(title: widget.gameName.toUpperCase()),
+      appBar: NavbarWidget(title: widget.gameName.toUpperCase(), userId: widget.guid,),
       
       body: Column(
         children: [

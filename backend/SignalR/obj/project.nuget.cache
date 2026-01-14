@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "osI5Gg1VZFA=",
+  "dgSpecHash": "LC2x7Q1RC/w=",
   "success": true,
-  "projectFilePath": "C:\\Users\\stepa\\Desktop\\lll\\backend\\SignalR\\SignalR.csproj",
+  "projectFilePath": "C:\\Users\\stepa\\Desktop\\find-your-teammate\\backend\\SignalR\\SignalR.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\stepa\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.3.0\\microsoft.aspnetcore.authentication.abstractions.2.3.0.nupkg.sha512",
     "C:\\Users\\stepa\\.nuget\\packages\\microsoft.aspnetcore.authorization\\2.3.0\\microsoft.aspnetcore.authorization.2.3.0.nupkg.sha512",
@@ -36,7 +36,7 @@
     "C:\\Users\\stepa\\.nuget\\packages\\microsoft.extensions.options\\8.0.2\\microsoft.extensions.options.8.0.2.nupkg.sha512",
     "C:\\Users\\stepa\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "C:\\Users\\stepa\\.nuget\\packages\\microsoft.net.http.headers\\2.3.0\\microsoft.net.http.headers.2.3.0.nupkg.sha512",
-    "C:\\Users\\stepa\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
+    "C:\\Users\\stepa\\.nuget\\packages\\newtonsoft.json\\13.0.5-beta1\\newtonsoft.json.13.0.5-beta1.nupkg.sha512",
     "C:\\Users\\stepa\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.11\\sqlitepclraw.bundle_e_sqlite3.2.1.11.nupkg.sha512",
     "C:\\Users\\stepa\\.nuget\\packages\\sqlitepclraw.core\\2.1.11\\sqlitepclraw.core.2.1.11.nupkg.sha512",
     "C:\\Users\\stepa\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.11\\sqlitepclraw.lib.e_sqlite3.2.1.11.nupkg.sha512",

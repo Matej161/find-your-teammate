@@ -5,30 +5,29 @@ import 'package:frontend/screens/forgot_password_screen.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
+
 // --- 1. FIREBASE IMPORTS ---
-// Required to initialize the Firebase "Engine"
 import 'package:firebase_core/firebase_core.dart';
-// This file was created by the 'flutterfire configure' command
-// It contains the API keys for Android and iOS
 import 'firebase_options.dart';
+
+// --- ADDED FOR NOTIFICATIONS: Import Messaging Package ---
+import 'package:firebase_messaging/firebase_messaging.dart'; 
 
 // Import the Game Selection Screen
 import 'screens/game_selection_screen.dart';
 import 'screens/profile_screen.dart';
 
 // --- 2. UPDATED MAIN FUNCTION ---
-// We add 'async' because connecting to Firebase takes a split second,
-// and we must wait for it to finish before showing the app.
 void main() async {
-  // This line ensures the "glue" between the widgets and the engine is ready.
-  // We MUST call this if we are doing anything asynchronous (like `await`) in main().
   WidgetsFlutterBinding.ensureInitialized();
 
-  // This connects your specific app to the Firebase project using the
-  // configuration found in firebase_options.dart
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // --- ADDED FOR NOTIFICATIONS: Call the function to get/print token ---
+  // We call this right after Firebase initializes so you can see the token in the console immediately.
+  await getDeviceToken();
 
   runApp(const MyApp());
 }
@@ -42,45 +41,67 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Find your teammate',
       
-      // Theme settings to match the dark look of your app
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,
-          brightness: Brightness.dark, // Enforces dark mode
+          brightness: Brightness.dark, 
         ),
         
         /*textTheme: GoogleFonts.quicksandTextTheme(
           Theme.of(context).textTheme,
         ),*/
         
-        scaffoldBackgroundColor: const Color(0xFF111827), // Deep dark background
+        scaffoldBackgroundColor: const Color(0xFF111827), 
         useMaterial3: true,
       ),
 
-      // Currently set to Game Selection for testing. 
-      // Change this to '/login' or '/home' when you want to start normally.
       initialRoute: '/home',
       routes: {
-        // Restored routes so login/register works
         '/home': (context) => const HomeScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/forgottenpassword': (context) => const ForgotPasswordScreen(),
         
-        // The new screen
         '/gameselection': (context) {
-          // 1. Získáme argumenty z aktuální cesty (ModalRoute)
-          // Použijeme 'as String', protože víme, že posíláme text.
-          // Pokud by argument mohl chybět, je lepší použít bezpečnější přístup (viz níže).
           final args = ModalRoute.of(context)!.settings.arguments as String;
-
-          // 2. Předáme získaný argument do widgetu
           return GameSelectionScreen(guid: args);
         },
-        '/profile': (context) => const ProfileScreen(),
-        
-        // NOTE: '/gameserver' is NOT here because it is dynamic (handled in game_selection_screen.dart)
+        '/profile': (context) {
+          // 1. Získáme argument (userId) z navigace
+          final args = ModalRoute.of(context)!.settings.arguments as String;
+
+          // 2. Předáme ho do ProfileScreen
+          return ProfileScreen(userId: args);
+        },
       },
     );
+  }
+}
+
+// --- ADDED FOR NOTIFICATIONS: The Logic to fetch the Token ---
+Future<void> getDeviceToken() async {
+  try {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    // 1. Request Permission (Crucial for iOS/Android 13+)
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      // 2. Fetch the token
+      String? token = await messaging.getToken();
+      
+      // 3. Print it clearly so you can copy it from the Debug Console
+      print("========================================");
+      print("FCM TOKEN: $token");
+      print("========================================");
+    } else {
+      print('User declined or has not accepted notification permissions');
+    }
+  } catch (e) {
+    print("Error getting token: $e");
   }
 }

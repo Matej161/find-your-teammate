@@ -247,26 +247,7 @@ class _LoginWidgetState extends State<LoginWidget> {
             ),
             const SizedBox(height: 10),
 
-            // Forgot Password Link
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed('/forgottenpassword');
-              },
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: screenHeight * 0.02),
-                  child: Text(
-                    "Forgot Password?",
-                    style: TextStyle(
-                      fontSize: screenWidth * 0.038, 
-                      color: accentColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            // Forgot Password Lin
 
             // Login Button
             Container(
