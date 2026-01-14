@@ -4,7 +4,7 @@ class Message {
   final String content;
   final DateTime timeSent;
   final String userId;
-  final String username;
+  String username;
 
   Message({
     required this.id,

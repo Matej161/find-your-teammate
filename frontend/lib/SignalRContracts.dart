@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:signalr_netcore/signalr_client.dart';
-import 'Message.dart'; // ⬅️ TOTO NESMÍ CHYBĚT
-
+import 'Message.dart'; 
 
 class SignalRContracts {
   late HubConnection _connection;
@@ -20,15 +19,13 @@ class SignalRContracts {
 
   void _registerHandlers() {
     _connection.on('ReceiveChatMessage', (args) {
-  if (args == null || args.isEmpty) return;
+      if (args == null || args.isEmpty) return;
 
-  final data = Map<String, dynamic>.from(args[0] as Map);
+      final data = Map<String, dynamic>.from(args[0] as Map);
+      final message = Message.fromJson(data);
 
-  final message = Message.fromJson(data);
-
-  _messageController.add(message);
-});
-
+      _messageController.add(message);
+    });
 
     _connection.on('ReceiveEditMessage', (args) {
       // TODO
@@ -56,15 +53,13 @@ class SignalRContracts {
 
   Future<List<Message>> getChatHistory(String roomId) async {
     try {
-      // I když server není async, Flutter na odpověď počkat musí
       final result = await _connection.invoke(
-        'GetChatHistory', // Název tvé metody na serveru
+        'GetChatHistory',
         args: [roomId],
       );
 
       if (result == null) return [];
 
-      // Přetypování z Object? na List a pak na tvoje Message objekty
       return (result as List)
           .map((m) => Message.fromJson(Map<String, dynamic>.from(m as Map)))
           .toList();
@@ -97,6 +92,37 @@ class SignalRContracts {
       args: [email],
     );
     return result as String;
+  }
+
+  // --- NOVÉ FUNKCE ---
+
+  // 1. Získání uživatelského jména podle ID
+  Future<String?> getUsername(String userId) async {
+    try {
+      final result = await _connection.invoke(
+        'GetUsername', // Název metody na C# Hubu
+        args: [userId],
+      );
+      return result as String?;
+    } catch (e) {
+      print("Chyba při získávání username: $e");
+      return null;
+    }
+  }
+
+  // 2. Změna uživatelského jména
+  Future<bool> changeUsername(String userId, String newUsername) async {
+    try {
+      final result = await _connection.invoke(
+        'ChangeUsername', // Název metody na C# Hubu
+        args: [userId, newUsername],
+      );
+      // Předpokládám, že backend vrací true pokud se to povedlo, jinak false
+      return result as bool;
+    } catch (e) {
+      print("Chyba při změně username: $e");
+      return false;
+    }
   }
 
   Future<void> dispose() async {

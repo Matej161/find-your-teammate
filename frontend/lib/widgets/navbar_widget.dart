@@ -4,13 +4,15 @@ import 'package:google_fonts/google_fonts.dart';
 class NavbarWidget extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final bool showBackButton;
-  final VoidCallback? onBackPressed; // Optional custom back button handler
+  final VoidCallback? onBackPressed;
+  final String userId; // Optional custom back button handler
 
   const NavbarWidget({
     super.key, 
     required this.title, 
     this.showBackButton = true, // Default to true so we can go back
-    this.onBackPressed, // Optional custom back button handler
+    this.onBackPressed,
+    required this.userId, // Optional custom back button handler
   });
 
   @override
@@ -157,7 +159,10 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                 // Navigate to Home
                 Navigator.of(context).pushReplacementNamed('/home');
               } else if (value == 'profile') {
-                Navigator.of(context).pushNamed('/profile');
+                Navigator.of(context).pushNamed(
+                    '/profile',
+                    arguments: widget.userId, // Zde pošleš své GUID
+                  );
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[

@@ -28,7 +28,7 @@ class GameSelectionScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: iceBackground,
       // REPLACED: Hardcoded AppBar is now your reusable widget
-      appBar: const NavbarWidget(title: 'SQUADUP'), 
+      appBar: NavbarWidget(title: 'SQUADUP ', userId: guid,), 
       body: SingleChildScrollView(
         child: Column(
           children: [

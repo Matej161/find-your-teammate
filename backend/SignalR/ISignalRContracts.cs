@@ -22,5 +22,6 @@ public interface IChatServer
     bool CanLogin(string email, string password);
     string Login(string email);
     string GetUsername(Guid guid);
+    Task<bool> ChangeUsername(string userId, string newUsername);
 
 }

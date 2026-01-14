@@ -1,6 +1,7 @@
-﻿using Backend;
+﻿using System.Text;
+using Backend;
 using Microsoft.AspNetCore.SignalR;
-
+using Newtonsoft.Json;
 using SignalR.Contracts;
 
 namespace SignalR;
@@ -34,7 +35,7 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
     {
         User user = _backend.UserRepo.GetById(userId);
         string username = user.Username;
-        var message = new ChatMessage() {Id = Guid.NewGuid(),
+        var message2 = new ChatMessage() {Id = Guid.NewGuid(),
             SenderId = userId,
             RoomId = Guid.Parse(roomId),
             Timestamp = DateTime.UtcNow,
@@ -44,9 +45,43 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
 
         _backend.Chat.SendMessage(userId, Guid.Parse(roomId), content);
 
+        string serverKey = "BBqXOsamid3y3vxa0YOrRp5v984WxtpOiV4OUi1dl7UbusZoxKXIzHxnFTZNsQj0A5V_tixVvFkOiU2jx0PUrf4"; // Firebase Console → Project Settings → Cloud Messaging
+        string fcmToken = "fb3jY43JSQKzP9InVblyrU:APA91bHhQTZORuerv7UCgTTQs9ARI2wEIeFYUntaKQ9wSxyhBKdgBkeqC8MLQoNXEIa729Hc00e1L0U9bIuNL_CxVKzw8VyWa1Jq5mJJCGocU8dUivWGtvk";
+
+        var message = new
+        {
+            to = fcmToken,
+            notification = new
+            {
+                title = "Nová zpráva",
+                body = content
+            },
+            data = new
+            {
+                key1 = "value1",
+                key2 = "value2"
+            }
+        };
+
+        string jsonMessage = JsonConvert.SerializeObject(message);
+
+        using (var client = new HttpClient())
+        {
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"key={serverKey}");
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
+
+            var response = await client.PostAsync(
+                "https://fcm.googleapis.com/fcm/send",
+                new StringContent(jsonMessage, Encoding.UTF8, "application/json")
+            );
+
+            string result = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(result);
+        }
+        
         await Clients
             .Group(roomId)
-            .ReceiveChatMessage(message);
+            .ReceiveChatMessage(message2);
     }
 
     public async Task SendEditMessage(Guid messageId, string newContent)
@@ -159,6 +194,7 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
 
     public string GetUsername(Guid guid)
     {
+        Console.WriteLine("Ziskani");
         return _backend.UserRepo.GetById(guid).Username;
     }
 
@@ -172,5 +208,17 @@ public class SignalRContracts : Hub<IChatClient>,IChatServer
     private string GetRoomNameForMessage(Guid messageId)
     {
         return "room-placeholder";
+    }
+    
+    // V ChatHub.cs
+
+    public async Task<bool> ChangeUsername(string userId, string newUsername)
+    {
+        Console.WriteLine("Zmena");
+        // Tady zavolej logiku pro změnu jména v DB
+        User user = _backend.UserRepo.GetById(Guid.Parse(userId));
+        user.Username = newUsername;
+        var success = _backend.UserRepo.Update(user);
+        return true;
     }
 }
